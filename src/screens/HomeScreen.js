@@ -64,7 +64,7 @@ const dateToString = (date)=>{
   return str.split("T")[0] 
 }
 
-const byDate = ((a,b)=>(a.date.seconds - b.date.seconds))
+const older = ((a,b)=>(a.date.seconds - b.date.seconds))
 
 
 
@@ -97,7 +97,7 @@ const HomeScreen = (props)=> {
 
        //日付の取得
        const weightLabels = [];
-       const sortedWeightData = [...weightData].sort(byDate)
+       const sortedWeightData = [...weightData].sort(older)
 
        sortedWeightData.forEach((item)=>{
          weightLabels.push(dateToString(item.date).slice(5))
@@ -140,7 +140,7 @@ const HomeScreen = (props)=> {
        
        //kcalの加工
        const kcalList =[]
-       const sortedKcalData = [...foodData].sort(byDate)
+       const sortedKcalData = [...foodData].sort(older)
       
        for(let i = 0; i < sortedKcalData.length ; i++){
          if(i === 0){
@@ -184,7 +184,8 @@ const HomeScreen = (props)=> {
       }
     })
   }
-     
+  const workout = {key:'workout', color: 'green'};
+  const massage = {key:'massage', color: 'blue', selectedDotColor: 'blue'};
     
 
      
@@ -202,8 +203,12 @@ const HomeScreen = (props)=> {
           </View>
         </View>
         <Calendar 
-          // onDayPress = {((day)=>{console.log(day.dateString,"day")})}
           onDayPress = {((day)=>{getWeight(day)})}
+          markedDates = {{
+            "2020-04-09":{marked: true},
+            '2020-04-26': {dots: [ massage,workout]}
+          }}
+          markingType={'multi-dot'}
           
         />
         {/* ユーザーが初めてログインした際にエラー発生 

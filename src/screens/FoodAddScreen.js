@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
 });
 
 
-// onPress={()=>{props.navigation.navigate("MemoList")}
 const FoodAddScreen = (props) => {
   const [kcal,setKcal] =useState("")
   const [foodMemo,setFoodMemo] =useState("")

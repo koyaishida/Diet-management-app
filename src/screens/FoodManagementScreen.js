@@ -2,7 +2,7 @@ import React ,{useState,useEffect}from 'react';
 import { StyleSheet, View,} from 'react-native';
 import FoodList from "../components/FoodList"
 import CircleButton from "../elements/CircleButton"
-
+import firebase from "firebase"
 
 
 const styles = StyleSheet.create({
@@ -15,37 +15,46 @@ const styles = StyleSheet.create({
   },
   
 });
+const older = ((a,b)=>(a.date.seconds - b.date.seconds))
 
 
 const  FoodManagementScreen = (props)=> {
-  console.log(props)
+  
   dateToString = (date)=>{
     const str = date.toDate().toISOString();
     return str.split("T")[0]
   }
-  const {foodData} = props.route.params
-  
-  const [foodList,setFoodList] = useState([])
+  const [foodData,setFoodData] = useState([])
   const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
   
+  
   useEffect(()=>{
-       const todayFoodList = foodData.filter((item,index,)=>{
-         if (dateToString(item.date) === currentDay){
-           return true
-         }
-       })
-       const sortedFoodData = [...todayFoodList].sort((a,b)=>(a.date.seconds - b.date.seconds))
-       setFoodList(sortedFoodData)
-  },[])
-    
-  
-  
+    const {currentUser} = firebase.auth();
+    const db =firebase.firestore()
 
+    db.collection(`users/${currentUser.uid}/food`)
+    .onSnapshot((querySnapshot)=>{
+      const foodData =[];
+      //firebaseから食事データを取得
+      querySnapshot.forEach((doc)=>{
+        foodData.push({...doc.data(),key: doc.id})
+      })
+      setFoodData(foodData)
+      const todayFoodList = foodData.filter((item,index,)=>{
+        if (dateToString(item.date) === currentDay){
+          return true
+            }
+       })
+  
+      const sortedFoodData = [...todayFoodList].sort(older)
+      setFoodData(sortedFoodData)
+    })   
+  },[])
  
     return (
       <View style={styles.container}>
           <FoodList 
-            foodList={foodList}
+            foodData={foodData}
             navigation={props.navigation}/>
         <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("FoodAdd")}/>
       </View>

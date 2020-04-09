@@ -54,7 +54,7 @@ const  FoodList =(props)=> {
   }
   return (
     <View style={styles.foodList}>
-      <FlatList data={props.foodList} renderItem={renderFood.bind(this)}/>
+      <FlatList data={props.foodData} renderItem={renderFood.bind(this)}/>
     </View>
   )  
 }
