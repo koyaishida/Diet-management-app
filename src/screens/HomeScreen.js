@@ -111,23 +111,8 @@ const HomeScreen = (props)=> {
        })
 
        setWeightList(weightList)
-       console.log(dateToString(weightData[1].date))
-
-       
 
      })
-
-     db.collection(`users/${currentUser.uid}/trainingMemoList`)
-     .onSnapshot((querySnapshot)=>{
-       const trainingList = []
-       querySnapshot.forEach((doc)=>{
-         trainingList.push({...doc.data(),key: doc.id})
-       })
-       setTrainingList(trainingList)
-     })
-
-
-
 
      db.collection(`users/${currentUser.uid}/food`)
      .onSnapshot((querySnapshot)=>{
@@ -174,21 +159,8 @@ const HomeScreen = (props)=> {
      })
      return (() => console.log('Clean Up '));
   },[])
-
-  const getWeight =(day)=>{
-    trainingList.forEach((item)=>{
-      if(dateToString(item.date) == day.dateString){
-       console.log(item)
-      }else{
-        return
-      }
-    })
-  }
-  const workout = {key:'workout', color: 'green'};
-  const massage = {key:'massage', color: 'blue', selectedDotColor: 'blue'};
-    
-
-     
+  
+  
     return (
       <View style={styles.container}>
         <View  style={styles.upperContainer}>
@@ -202,19 +174,10 @@ const HomeScreen = (props)=> {
             <Text style={styles.upperContainerText}>5kg</Text>
           </View>
         </View>
-        <Calendar 
-          onDayPress = {((day)=>{getWeight(day)})}
-          markedDates = {{
-            "2020-04-09":{marked: true},
-            '2020-04-26': {dots: [ massage,workout]}
-          }}
-          markingType={'multi-dot'}
-          
-        />
         {/* ユーザーが初めてログインした際にエラー発生 
                 labels: [],
               datasets: [{data:[0]},*/}
-         {/* <LineChart 
+         <LineChart 
             data = {{
                labels: weightLabels ,
                 datasets: [{data:weightList
@@ -241,10 +204,10 @@ const HomeScreen = (props)=> {
             chartConfig={chartConfig}
             withInnerLines={false}
             withOuterLines={false}
-            />  */}
+            /> 
 
         <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-          onPress={()=>props.navigation.navigate("TrainingMenu")}>
+          onPress={()=>props.navigation.navigate("TrainingManagement")}>
           <Text style={styles.buttonTitle}>今日のトレーニング
           </Text>
         </TouchableHighlight> 

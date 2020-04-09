@@ -71,6 +71,7 @@ const FoodAddScreen = (props) => {
       <TextInput multiline style={styles.foodMemo} value={foodMemo}
        onChangeText={text => setFoodMemo(text)}  placeholder="食事内容"/>
       <CircleButton name={"check"} onPress={handleSubmit}/>
+      <Calendar />
     </View>
   );
 }
