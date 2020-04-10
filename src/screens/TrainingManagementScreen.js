@@ -10,8 +10,6 @@ import {Calendar} from 'react-native-calendars'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: "#FFFDF6",
     width: "100%"
   },
@@ -39,42 +37,36 @@ const  TrainingManagementScreen = (props)=> {
          trainingList.push({...doc.data(),key: doc.id})
        })
        setTrainingList(trainingList)
-
-       const todayTrainingList = trainingList.filter((item,index,)=>{
-        if (dateToString(item.date) === currentDay){
-          return true
-        }
-      })
-      const sortedTrainingList = [...todayTrainingList].sort(older)
-       setTrainingList(sortedTrainingList)
-      })   
+    })   
   },[])
-  const getWeight =(day)=>{
-    trainingList.forEach((item)=>{
-      if(dateToString(item.date) == day.dateString){
-       console.log(item)
-      }else{
-        return
-      }
-    })
-  }
 
+   const todayTrainingList = trainingList.filter((item,index,)=>{
+     if (dateToString(item.date) === currentDay){
+       return true
+     }
+   })
+
+   const sortedTrainingList = [...todayTrainingList].sort(older)
  
     return (
       <View style={styles.container}>
-          <TrainingList 
-            trainingList={trainingList}
-            navigation={props.navigation}/>
-        <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("TrainingMenu")}/>
         <Calendar 
-          onDayPress = {((day)=>{getWeight(day)})}
+          onDayPress = {((day)=>{setCurrentDay(day.dateString)})}
           style={{
             borderWidth: 1,
             borderColor: 'gray',
             height: 350,
             width:"100%"
           }}
+          markedDates = {{
+            [currentDay]:{selected:true,selectedColor:"green"},
+            
+         }}
         />
+          <TrainingList 
+            trainingList={sortedTrainingList}
+            navigation={props.navigation}/>
+        <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("TrainingMenu")}/> 
       </View>
     ); 
   

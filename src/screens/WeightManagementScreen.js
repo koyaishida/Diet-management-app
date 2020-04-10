@@ -43,7 +43,7 @@ const WeightManagementScreen = (props) => {
     console.log("press")
      const db = firebase.firestore();
      const {currentUser} = firebase.auth();
-      db.collection(`users/${currentUser.uid}/trainingMenu`).add({
+      db.collection(`users/${currentUser.uid}/weight`).add({
            weight : weight,
            bodyFatPercentage : bodyFatPercentage,
            date: new Date()

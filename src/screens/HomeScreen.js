@@ -2,7 +2,6 @@ import React ,{useState,useEffect}from 'react';
 import { StyleSheet, View, Text,TouchableHighlight } from 'react-native';
 import firebase from "firebase"
 import {LineChart} from "react-native-chart-kit"
-import {Calendar,CalendarList,Agenda} from 'react-native-calendars'
 
 const styles = StyleSheet.create({
   container: {
@@ -73,7 +72,6 @@ const HomeScreen = (props)=> {
   const [weightData,setWeightData] = useState([])
   const [weightLabels,setWeightLabels] = useState([])
   const [weightList,setWeightList] = useState([1])
-  const [trainingList,setTrainingList] = useState([1])
   const [foodData,setFoodData] = useState([])
   const [kcalList,setKcalList] = useState([1])
   const [currentKcal,setCurrentKcal] = useState([])
@@ -177,7 +175,7 @@ const HomeScreen = (props)=> {
         {/* ユーザーが初めてログインした際にエラー発生 
                 labels: [],
               datasets: [{data:[0]},*/}
-         <LineChart 
+          <LineChart 
             data = {{
                labels: weightLabels ,
                 datasets: [{data:weightList
@@ -191,12 +189,13 @@ const HomeScreen = (props)=> {
             chartConfig={chartConfig}
             withInnerLines={false}
             withOuterLines={false}
-        />  
+        /> 
          <LineChart 
             data = {{
                labels: kcalLabels,
-               datasets: [{data:kcalList},
-            ]}}
+               datasets: [{data:kcalList}
+            ]}
+          }
             formatYLabel={toInteger}
             yAxisSuffix="kcal"
             style={styles.lineChart} 
@@ -213,7 +212,7 @@ const HomeScreen = (props)=> {
         </TouchableHighlight> 
 
         <TouchableHighlight style={styles.button} 
-                            underlayColor="#C70F66"
+          underlayColor="#C70F66"
           onPress={()=>props.navigation.navigate("FoodManagement",{foodData:foodData})}>
           <Text style={styles.buttonTitle}>今日の食事</Text>
         </TouchableHighlight>

@@ -2,35 +2,33 @@ import React from 'react';
 import { StyleSheet, Text, View,TouchableHighlight,FlatList } from 'react-native';
 
 const styles = StyleSheet.create({
-  foodList: {
+  trainingList: {
     width: "100%",
     flex: 1,
   },
   listContainer: {
-    padding: 16,
     width: "100%",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    backgroundColor: '#fff',
+    backgroundColor: '#fff', 
   },
   number: {
-    fontSize: 24,
-    marginBottom: 2,
-    paddingLeft: 6,
+    fontSize: 18,
     lineHeight: 50,
   },
   trainingMenu: {
-    fontSize: 28,
-    width: 160,
+    fontSize: 20,
+    width: 180,
     lineHeight: 50,
+    textAlign: "center"
   },
   trainingList :{
     flexDirection : "row",
-    justifyContent : "space-between"
   },
   unit :{
-    fontSize : 20,
-    marginTop :15,
+    fontSize : 12,
+    padding: 12,
+    marginTop: 10,
   }
 })
 
@@ -39,9 +37,8 @@ const styles = StyleSheet.create({
 
 const  TrainingList =(props)=> {
 
-  const renderFood =({item})=> {
+  const renderTraining =({item})=> {
     return(
-      <TouchableHighlight style={styles.foodList} onPress={()=>{props.navigation.navigate("FoodAdd",{food : item})}}>
         <View style={styles.listContainer}>
           <View style={styles.trainingList}>
             <Text style={styles.trainingMenu}>{item.menuName}</Text>
@@ -56,12 +53,11 @@ const  TrainingList =(props)=> {
             <Text style={styles.unit}>セット</Text>
           </View>
         </View>
-      </TouchableHighlight>
     )
   }
   return (
-    <View style={styles.foodList}>
-      <FlatList data={props.trainingList} renderItem={renderFood.bind(this)}/>
+    <View style={styles.trainingList}>
+      <FlatList data={props.trainingList} renderItem={renderTraining.bind(this)}/>
     </View>
   )  
 }

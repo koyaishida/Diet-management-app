@@ -15,8 +15,10 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingBottom: 16,
     fontSize: 24,
-    width: "80%",
-    backgroundColor:"#fff",
+    width: "70%",
+    backgroundColor:"#FFFDF6",
+    borderBottomColor: "#ddd",
+    borderBottomWidth:1
   },
   inputLocation :{
     flexDirection : "row",
