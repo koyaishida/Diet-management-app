@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View,TouchableHighlight,SectionList,SafeAreaView,TouchableOpacity } from 'react-native';
 
+
 const styles = StyleSheet.create({
   container: {
     width: "100%",
@@ -32,11 +33,11 @@ const styles = StyleSheet.create({
     lineHeight: 38,
   }
 })
+const array = ["胸","背中","肩","腕","脚","その他"]
+const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
  
  const  TrainingMenuList =(props)=> {
    const {navigation} = props.navigation
-   const array = ["胸","背中","肩","腕","脚","その他"]
-   const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
    const DATA = props.trainingMenu
    DATA.sort(sortedTraining)
    
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
         <Text style={styles.title}>{data}</Text> 
     </TouchableHighlight>
   );
+
    return(
     <SafeAreaView style={styles.container}>
       <SectionList

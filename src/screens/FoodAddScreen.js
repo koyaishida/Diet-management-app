@@ -51,7 +51,6 @@ const FoodAddScreen = (props) => {
          date: new Date()
        })
       .then(()=> {
-        //FoodManagementScreenに移動する際、paramsが無いため、Foodリストが表示されない。
         props.navigation.navigate("FoodManagement")
       })
       .catch((error)=>{
@@ -71,7 +70,6 @@ const FoodAddScreen = (props) => {
       <TextInput multiline style={styles.foodMemo} value={foodMemo}
        onChangeText={text => setFoodMemo(text)}  placeholder="食事内容"/>
       <CircleButton name={"check"} onPress={handleSubmit}/>
-      <Calendar />
     </View>
   );
 }

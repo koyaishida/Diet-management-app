@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
 });
 
 const TrainingMemoScreen = (props) => {
+  console.log(props)
   const {trainingMenu,part} = props.route.params
   const [kg,setKg] =useState("")
   const [reps,setReps] =useState("")

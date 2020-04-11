@@ -88,20 +88,20 @@ const HomeScreen = (props)=> {
       
        const weightData =[];
        //firebaseから体重データを取得
+       //ここではデータをweightDataの加工のみにして、
+       //JSXで値を処理する。
         querySnapshot.forEach((doc)=>{
           weightData.push({...doc.data(),key: doc.id})
          })
         setWeightData(weightData)
-
        //日付の取得
-       const weightLabels = [];
-       const sortedWeightData = [...weightData].sort(older)
+      const weightLabels = [];
+      const sortedWeightData = [...weightData].sort(older)
 
-       sortedWeightData.forEach((item)=>{
-         weightLabels.push(dateToString(item.date).slice(5))
+       sortedWeightData.forEach((a)=>{
+         weightLabels.push(dateToString(a.date).slice(5))
        })
        setWeightLabels(weightLabels)
-
        //体重の値の取得
        const weightList =[]
        sortedWeightData.forEach((item)=>{
@@ -109,7 +109,6 @@ const HomeScreen = (props)=> {
        })
 
        setWeightList(weightList)
-
      })
 
      db.collection(`users/${currentUser.uid}/food`)

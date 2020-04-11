@@ -3,6 +3,7 @@ import { StyleSheet, View,} from 'react-native';
 import FoodList from "../components/FoodList"
 import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
+import {Calendar} from 'react-native-calendars'
 
 
 const styles = StyleSheet.create({
@@ -40,21 +41,34 @@ const  FoodManagementScreen = (props)=> {
         foodData.push({...doc.data(),key: doc.id})
       })
       setFoodData(foodData)
-      const todayFoodList = foodData.filter((item,index,)=>{
-        if (dateToString(item.date) === currentDay){
-          return true
-            }
-       })
-  
-      const sortedFoodData = [...todayFoodList].sort(older)
-      setFoodData(sortedFoodData)
-    })   
+    })
   },[])
+    const todayFoodList = foodData.filter((item,index,)=>{
+      if (dateToString(item.date) === currentDay){
+        return true
+          }
+    })
+
+    const sortedFoodData = [...todayFoodList].sort(older)
+    
  
     return (
       <View style={styles.container}>
+          <Calendar 
+          onDayPress = {((day)=>{setCurrentDay(day.dateString)})}
+          style={{
+            borderWidth: 1,
+            borderColor: 'gray',
+            height: 350,
+            width:"100%"
+          }}
+          markedDates = {{
+            [currentDay]:{selected:true,selectedColor:"green"},
+            
+         }}
+        />
           <FoodList 
-            foodData={foodData}
+            foodData={sortedFoodData}
             navigation={props.navigation}/>
         <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("FoodAdd")}/>
       </View>

@@ -41,16 +41,28 @@ firebase.initializeApp(firebaseConfig);
    return(
      <NavigationContainer>
        <Stack.Navigator>
-         <Stack.Screen name="Login" component={LoginScreen} /> 
-         <Stack.Screen name="Signup" component={SignupScreen} />
-         <Stack.Screen name="Home" component={HomeScreen} />   
-         <Stack.Screen name="WeightManagement" component={WeightManagementScreen} />   
-         <Stack.Screen name="FoodManagement" component={FoodManagementScreen} />   
-         <Stack.Screen name="FoodAdd" component={FoodAddScreen} />   
-         <Stack.Screen name="TrainingManagement" component={TrainingManagementScreen} />   
-         <Stack.Screen name="TrainingMenu" component={TrainingMenuScreen} />   
-         <Stack.Screen name="TrainingMemo" component={TrainingMemoScreen} />   
-         <Stack.Screen name="TrainingAdd" component={TrainingAddScreen} />   
+         <Stack.Screen name="Login" component={LoginScreen}
+         options={{ title: "ログイン" }} /> 
+         <Stack.Screen name="Signup" component={SignupScreen} 
+         options={{ title: "新規登録" }}/>
+         <Stack.Screen name="Home" component={HomeScreen} 
+         options={{ title: "HOME" }}/>   
+         <Stack.Screen name="WeightManagement" component={WeightManagementScreen} 
+         options={{ title: "体重管理" }}/>   
+         <Stack.Screen name="FoodManagement" component={FoodManagementScreen} 
+         options={{ title: "食事管理" }}/>   
+         <Stack.Screen name="FoodAdd" component={FoodAddScreen} 
+         options={{ title: "食事の追加" }}/>   
+         <Stack.Screen name="TrainingManagement" component={TrainingManagementScreen} 
+         options={{ title: 'トレーニング管理' }}
+         />   
+         <Stack.Screen name="TrainingMenu" component={TrainingMenuScreen} 
+         options={{ title: "トレーニングメニュー" }}/>   
+         <Stack.Screen name="TrainingMemo" component={TrainingMemoScreen} 
+         options={({ route }) => ({ title: route.params.trainingMenu })}
+         />   
+         <Stack.Screen name="TrainingAdd" component={TrainingAddScreen} 
+         options={{ title: "トレーニングメニューの追加" }}/>   
        </Stack.Navigator>
      </NavigationContainer>
    )

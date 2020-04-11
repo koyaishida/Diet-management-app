@@ -33,7 +33,7 @@ const TrainingMenuScreen = (props)=> {
             {title,data}
           ))
           setTrainingMenu(trainingMenu)
-           setId(doc.id)
+          setId(doc.id)
         })
         
      })
