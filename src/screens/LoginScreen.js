@@ -9,7 +9,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFDF6",
     width: "100%",
-    padding: 24,
+    paddingTop: 72,
+    paddingRight: 24,
+    paddingLeft: 24,
   },
   input: {
     height: 48,
@@ -20,11 +22,7 @@ const styles = StyleSheet.create({
     padding: 8,
     lineHeight: 24,
     fontSize: 18,
-  },
-  title: {
-    fontSize: 28,
-    marginBottom: 24,
-    alignSelf: "center"
+    borderRadius: 6,
   },
   button: {
     backgroundColor: "#E31676",
@@ -33,15 +31,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "80%",
-    alignSelf: "center"
+    alignSelf: "center",
+    marginTop: 18,
   },
   buttonTitle: {
     fontSize:20,
     color: "#fff",
   },
   toSignup :{
-    marginTop: 10,
-    alignSelf: "center"
+    marginTop: 18,
+    alignSelf: "center",
+    borderBottomWidth:1,
+  },
+  signupText:{
+    fontSize:20,
   }
   
 });
@@ -49,22 +52,21 @@ const styles = StyleSheet.create({
 
 const LoginScreen = (props) => {
 
-  const [email,setEmail] =useState("k.157.2@gmail.com")
-  const [password,setPassword] =useState("koya1572")
+  const [email,setEmail] =useState("k.157.2aic@gmail.com")
+  const [password,setPassword] =useState("k-a.157.2")
 
   const handleLogin = () =>{
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(()=>{
         console.log("success")
-        
-        const resetAction = 
-          CommonActions.reset({
-            index:0,
-            routes: [
-              {name: "Home"}
-            ],
-          })
-        props.navigation.dispatch(resetAction)
+         const resetAction = 
+           CommonActions.reset({
+             index:0,
+             routes: [
+               {name: "Home"}
+             ],
+           })
+         props.navigation.dispatch(resetAction)
       })
 
       .catch((error)=>{
@@ -79,23 +81,18 @@ const LoginScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        ログイン
-      </Text>
 
       <TextInput style={styles.input} value={email} placeholder="Email" 
       onChangeText={text => setEmail(text)} autoCapitalize="none" autoCorrect={false}/>
-
-      {/* onChangeではなくonChangeText */}
       <TextInput style={styles.input} value={password} placeholder="Password" onChangeText={text => setPassword(text)} autoCapitalize="none" autoCorrect={false} secureTextEntry={true}/>
 
       <TouchableHighlight style={styles.button} underlayColor="#C70F66"
         onPress={handleLogin}>
-        <Text style={styles.buttonTitle}>ログインする</Text>
+        <Text style={styles.buttonTitle}>ログイン</Text>
       </TouchableHighlight>
       <TouchableOpacity  style={styles.toSignup} onPress={switchToSignup}>
-        <Text>
-          メンバー登録する
+        <Text style={styles.signupText}>
+          新規登録はこちら
         </Text>
       </TouchableOpacity>
 

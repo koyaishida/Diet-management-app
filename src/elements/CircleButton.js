@@ -39,9 +39,9 @@ const CircleButton = (props) =>{
   let name = props.name
 
   return (
-  <TouchableHighlight 　style={[styles.memoAdd,style,{backgroundColor: bgColor}]} onPress={onPress} underlayColor="transparent">
+  <TouchableHighlight style={[styles.memoAdd,style,{backgroundColor: bgColor}]} onPress={onPress} underlayColor="transparent">
     <View>
-      <Text　style={[styles.memoAddButton,{color: textColor}]}>
+      <Text style={[styles.memoAddButton,{color: textColor}]}>
         <FontAwesome name={name} size={25}/>
       </Text>
     </View>

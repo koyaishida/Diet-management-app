@@ -2,6 +2,7 @@ import React ,{useState,useEffect}from 'react';
 import { StyleSheet, View, Text,TouchableHighlight } from 'react-native';
 import firebase from "firebase"
 import {LineChart} from "react-native-chart-kit"
+import CircleButton from "../elements/CircleButton"
 
 const styles = StyleSheet.create({
   container: {
@@ -11,20 +12,23 @@ const styles = StyleSheet.create({
   },
   upperContainer :{
     flexDirection: "row",
-    height: 100,
-    justifyContent: "space-around",
-    alignItems: "center"
+    padding:20,
+    paddingRight:30,
   },
+  upperLeft:{
+    width:"50%",
+  }
+  ,
   upperContainerTitle : {
-    fontSize: 30,
+    fontSize: 18,
+    alignSelf: "flex-end"
   },
   upperContainerText : {
-    fontSize: 24,
+    fontSize: 22,
     alignSelf: "flex-end"
   },
   lineChart: {
     alignItems: "center",
-    marginTop: 10,
   },
   button: {
     backgroundColor: "green",
@@ -71,159 +75,172 @@ const older = ((a,b)=>(a.date.seconds - b.date.seconds))
 const HomeScreen = (props)=> {
   const [weightData,setWeightData] = useState([])
   const [weightLabels,setWeightLabels] = useState([])
-  const [weightList,setWeightList] = useState([1])
+  const [weightList,setWeightList] = useState([0])
   const [foodData,setFoodData] = useState([])
-  const [kcalList,setKcalList] = useState([1])
+  const [kcalList,setKcalList] = useState([0])
   const [currentKcal,setCurrentKcal] = useState([])
   const [kcalLabels,setKcalLabels] = useState([])
-
-  
+  const [requiredKcal,setRequiredKcal] = useState([])
+  const [targetWeight,setTargetWeight] = useState([])
      
   useEffect (()=>{
+    console.log("render")
     const {currentUser} = firebase.auth();
     const db =firebase.firestore()
 
-     db.collection(`users/${currentUser.uid}/weight`)
-     .onSnapshot((querySnapshot)=>{
-      
-       const weightData =[];
-       //firebaseから体重データを取得
-       //ここではデータをweightDataの加工のみにして、
-       //JSXで値を処理する。
-        querySnapshot.forEach((doc)=>{
-          weightData.push({...doc.data(),key: doc.id})
-         })
-        setWeightData(weightData)
-       //日付の取得
-      const weightLabels = [];
+    db.collection(`users/${currentUser.uid}/weight`)
+    .onSnapshot((querySnapshot)=>{
+      const weightData =[];
+      //firebaseから体重データを取得
+      querySnapshot.forEach((doc)=>{
+        weightData.push({...doc.data(),key: doc.id})
+      })
       const sortedWeightData = [...weightData].sort(older)
+      setWeightData(weightData)
+      //日付の取得
+      const weightLabels = [];
+      setWeightLabels(weightLabels)
+      sortedWeightData.forEach((a)=>{
+        weightLabels.push(dateToString(a.date).slice(5))
+      })
 
-       sortedWeightData.forEach((a)=>{
-         weightLabels.push(dateToString(a.date).slice(5))
-       })
-       setWeightLabels(weightLabels)
-       //体重の値の取得
-       const weightList =[]
-       sortedWeightData.forEach((item)=>{
-         weightList.push(parseFloat(item.weight).toFixed(1))
-       })
+      //体重の値の取得
+      const weightList =[]
+      sortedWeightData.forEach((item)=>{
+        weightList.push(parseFloat(item.weight))
+      })
+      if(weightList.length == 0){
+        setWeightList([0])
+      }else{
+        setWeightList(weightList)
+      }
+    })
 
-       setWeightList(weightList)
-     })
-
-     db.collection(`users/${currentUser.uid}/food`)
-     .onSnapshot((querySnapshot)=>{
-       const foodData =[];
-       //firebaseから食事データを取得
-        querySnapshot.forEach((doc)=>{
-          foodData.push({...doc.data(),key: doc.id})
-         })
-        setFoodData(foodData)
-       
-       //kcalの加工
-       const kcalList =[]
-       const sortedKcalData = [...foodData].sort(older)
+    db.collection(`users/${currentUser.uid}/food`)
+    .onSnapshot((querySnapshot)=>{
+      const foodData =[];
+      //firebaseから食事データを取得
+      querySnapshot.forEach((doc)=>{
+        foodData.push({...doc.data(),key: doc.id})
+        })
+      setFoodData(foodData)
       
-       for(let i = 0; i < sortedKcalData.length ; i++){
-         if(i === 0){
-           kcalList.push(parseFloat(sortedKcalData[i].kcal))
-         }else{
-           if(dateToString(sortedKcalData[i].date) === dateToString(sortedKcalData[i -1].date)){
-             kcalList[kcalList.length-1] += parseFloat(sortedKcalData[i].kcal)
-           }else{
-               kcalList.push(parseFloat(sortedKcalData[i].kcal))
-             }
-         }
-       }
-       setKcalList(kcalList)
-       setCurrentKcal(kcalList[kcalList.length-1]) 
+      //kcalの加工
+      const kcalList =[]
+      const sortedKcalData = [...foodData].sort(older)
+      for(let i = 0; i < sortedKcalData.length ; i++){
+        if(i === 0){
+          kcalList.push(parseFloat(sortedKcalData[i].kcal))
+        }else{
+          if(dateToString(sortedKcalData[i].date) === dateToString(sortedKcalData[i -1].date)){
+            kcalList[kcalList.length-1] += parseFloat(sortedKcalData[i].kcal)
+          }else{
+              kcalList.push(parseFloat(sortedKcalData[i].kcal))
+            }
+        }
+      }
+      if(kcalList.length == 0){
+        setKcalList([0])
+      }else{
+        setKcalList(kcalList)
+      }  
+      setCurrentKcal(kcalList[kcalList.length-1]) 
 
 
       //kcalLabelの加工
-       const kcalLabels = [];
+      const kcalLabels = [];
+      for (let i = 0; i < sortedKcalData.length; i++){
+        if(i === 0){
+          kcalLabels.push(dateToString(sortedKcalData[i].date).slice(5))
+        }else {
+          if(dateToString(sortedKcalData[i].date) === dateToString(sortedKcalData[i -1].date)){
+          }else{
+              kcalLabels.push(dateToString(sortedKcalData[i].date).slice(5))
+            }
+        }
+      }
+      setKcalLabels(kcalLabels)
+    })
 
-       for (let i = 0; i < sortedKcalData.length; i++){
-         if(i === 0){
-           kcalLabels.push(dateToString(sortedKcalData[i].date).slice(5))
-         }else {
-           if(dateToString(sortedKcalData[i].date) === dateToString(sortedKcalData[i -1].date)){
-           }else{
-               kcalLabels.push(dateToString(sortedKcalData[i].date).slice(5))
-             }
-         }
-       }
-       setKcalLabels(kcalLabels)
-     })
-     return (() => console.log('Clean Up '));
+    
+    db.collection(`users/${currentUser.uid}/personalData`)
+    .onSnapshot((querySnapshot)=>{
+      const personalData = []
+      querySnapshot.forEach((doc)=>{
+        personalData.push({...doc.data(),key: doc.id})
+      })
+      setRequiredKcal(personalData[0].requiredKcal)
+      setTargetWeight(personalData[0].targetWeight)
+    })
+
+      if (weightData == null) { return null; }
+      if (foodData == null) { return null; }
+     return () => {console.log('Clean Up ')};
   },[])
-  
-  
-    return (
-      <View style={styles.container}>
-        <View  style={styles.upperContainer}>
-          <View>
-            <Text style={styles.upperContainerTitle}>摂取カロリー</Text>
-            <Text style={styles.upperContainerText}>{`${currentKcal}kcal`}</Text>
-          </View>
 
-          <View>
-            <Text style={styles.upperContainerTitle}>目標体重まで</Text>
-            <Text style={styles.upperContainerText}>5kg</Text>
-          </View>
+  
+        
+  
+  return (
+    <View style={styles.container}>
+      <View  style={styles.upperContainer}>
+        <View style={styles.upperLeft}>
+          <Text style={styles.upperContainerTitle}>必要摂取カロリーまで</Text>
+          <Text style={styles.upperContainerText}>{`${requiredKcal-currentKcal} kcal`}</Text>
         </View>
-        {/* ユーザーが初めてログインした際にエラー発生 
-                labels: [],
-              datasets: [{data:[0]},*/}
-          <LineChart 
-            data = {{
-               labels: weightLabels ,
-                datasets: [{data:weightList
-               },
-               ] 
-            }}
-            formatYLabel={decimalPoint}
-            yAxisSuffix=" kg"
-            style={styles.lineChart} 
-            width={400} height={200} 
-            chartConfig={chartConfig}
-            withInnerLines={false}
-            withOuterLines={false}
-        /> 
-         <LineChart 
-            data = {{
-               labels: kcalLabels,
-               datasets: [{data:kcalList}
-            ]}
-          }
-            formatYLabel={toInteger}
-            yAxisSuffix="kcal"
-            style={styles.lineChart} 
-            width={400} height={200} 
-            chartConfig={chartConfig}
-            withInnerLines={false}
-            withOuterLines={false}
-            /> 
 
-        <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-          onPress={()=>props.navigation.navigate("TrainingManagement")}>
-          <Text style={styles.buttonTitle}>今日のトレーニング
-          </Text>
-        </TouchableHighlight> 
-
-        <TouchableHighlight style={styles.button} 
-          underlayColor="#C70F66"
-          onPress={()=>props.navigation.navigate("FoodManagement",{foodData:foodData})}>
-          <Text style={styles.buttonTitle}>今日の食事</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-          onPress={()=>props.navigation.navigate("WeightManagement")}>
-        <Text style={styles.buttonTitle} >今日の体重</Text>
-        </TouchableHighlight> 
-
+        <View style={styles.upperLeft}>
+          <Text style={styles.upperContainerTitle}>目標体重まで</Text>
+          <Text style={styles.upperContainerText}>{`${Math.round((weightList[weightList.length-1]-targetWeight)*10)/10} kg`}</Text>
+        </View>
       </View>
-    ); 
-  
+        <LineChart 
+          data = {{
+            labels: weightLabels,
+            datasets: [{data:weightList}]
+          }}
+          formatYLabel={decimalPoint}
+          yAxisSuffix=" kg"
+          style={styles.lineChart} 
+          width={400} height={200} 
+          chartConfig={chartConfig}
+          withInnerLines={false}
+          withOuterLines={false}
+        />
+        <LineChart 
+          data = {{
+              labels: kcalLabels,
+              datasets: [{data:kcalList}
+          ]}
+        }
+          formatYLabel={toInteger}
+          yAxisSuffix="kcal"
+          style={styles.lineChart} 
+          width={400} height={200} 
+          chartConfig={chartConfig}
+          withInnerLines={false}
+          withOuterLines={false}
+          /> 
+
+      <TouchableHighlight style={styles.button} underlayColor="#C70F66"
+        onPress={()=>props.navigation.navigate("TrainingManagement")}>
+        <Text style={styles.buttonTitle}>今日のトレーニング
+        </Text>
+      </TouchableHighlight> 
+
+      <TouchableHighlight style={styles.button} 
+        underlayColor="#C70F66"
+        onPress={()=>props.navigation.navigate("FoodManagement")}>
+        <Text style={styles.buttonTitle}>今日の食事</Text>
+      </TouchableHighlight>
+
+      <TouchableHighlight style={styles.button} underlayColor="#C70F66"
+        onPress={()=>props.navigation.navigate("WeightManagement")}>
+      <Text style={styles.buttonTitle} >今日の体重</Text>
+      </TouchableHighlight>
+      <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")}/>
+    </View>
+  ); 
 }
 
 export default HomeScreen

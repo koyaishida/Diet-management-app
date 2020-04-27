@@ -13,6 +13,7 @@ import TrainingManagementScreen from './src/screens/TrainingManagementScreen';
 import TrainingMenuScreen from './src/screens/TrainingMenuScreen';
 import TrainingMemoScreen from './src/screens/TrainingMemoScreen';
 import TrainingAddScreen from './src/screens/TrainingAddScreen';
+import PersonalDataScreen from './src/screens/PersonalDataScreen';
 
 require("firebase/firestore")
 
@@ -40,29 +41,34 @@ firebase.initializeApp(firebaseConfig);
  const App = ()=>{
    return(
      <NavigationContainer>
-       <Stack.Navigator>
+       <Stack.Navigator>  
          <Stack.Screen name="Login" component={LoginScreen}
-         options={{ title: "ログイン" }} /> 
+          options={{ title: "ログイン" }} /> 
+        <Stack.Screen name="Home" component={HomeScreen} 
+          options={{ title: "HOME" }}/> 
+         
          <Stack.Screen name="Signup" component={SignupScreen} 
-         options={{ title: "新規登録" }}/>
-         <Stack.Screen name="Home" component={HomeScreen} 
-         options={{ title: "HOME" }}/>   
+          options={{ title: "新規登録" }}/>
+
+         <Stack.Screen name="PersonalData" component={PersonalDataScreen}
+          options={{ title: "設定" }} /> 
+         
          <Stack.Screen name="WeightManagement" component={WeightManagementScreen} 
-         options={{ title: "体重管理" }}/>   
+          options={{ title: "体重管理" }}/>   
          <Stack.Screen name="FoodManagement" component={FoodManagementScreen} 
-         options={{ title: "食事管理" }}/>   
+          options={{ title: "食事管理" }}/>   
          <Stack.Screen name="FoodAdd" component={FoodAddScreen} 
-         options={{ title: "食事の追加" }}/>   
+          options={{ title: "食事の追加" }}/>   
          <Stack.Screen name="TrainingManagement" component={TrainingManagementScreen} 
-         options={{ title: 'トレーニング管理' }}
+          options={{ title: 'トレーニング管理' }}
          />   
          <Stack.Screen name="TrainingMenu" component={TrainingMenuScreen} 
-         options={{ title: "トレーニングメニュー" }}/>   
+          options={{ title: "トレーニングメニュー" }}/>   
          <Stack.Screen name="TrainingMemo" component={TrainingMemoScreen} 
-         options={({ route }) => ({ title: route.params.trainingMenu })}
+          options={({ route }) => ({ title: route.params.trainingMenu })}
          />   
          <Stack.Screen name="TrainingAdd" component={TrainingAddScreen} 
-         options={{ title: "トレーニングメニューの追加" }}/>   
+          options={{ title: "トレーニングメニューの追加" }}/>   
        </Stack.Navigator>
      </NavigationContainer>
    )

@@ -57,33 +57,33 @@ const SignupScreen = (props) => {
     .then(()=>{
       console.log("success")
       const db = firebase.firestore();
-     const {currentUser} = firebase.auth();
-      db.collection(`users/${currentUser.uid}/trainingMenu`).add({
-        "胸" : [
-          "ベンチプレス","チェストプレス","ダンベルフライ"
-        ],
-        "背中": [
-          "懸垂","デッドリフト","ラットプルダウン"
-        ],
-        "脚": [
-          "スクワット","レッグプレス","レッグエクステンション"
-        ],
-        "肩":[
-          "サイドレイズ","ショルダープレス","フロントレイズ",
-        ],
-        "腕": [
-          "アームカール"
-        ],
-        "その他": [
-          "ランニング","ウォーキング",
-        ]
+      const {currentUser} = firebase.auth();
+       db.collection(`users/${currentUser.uid}/trainingMenu`).add({
+         "胸" : [
+           "ベンチプレス","チェストプレス","ダンベルフライ"
+         ],
+         "背中": [
+           "懸垂","デッドリフト","ラットプルダウン"
+         ],
+         "脚": [
+           "スクワット","レッグプレス","レッグエクステンション"
+         ],
+         "肩":[
+           "サイドレイズ","ショルダープレス","フロントレイズ",
+         ],
+         "腕": [
+           "アームカール"
+         ],
+         "その他": [
+           "ランニング","ウォーキング",
+         ]
           
-      })
+       })
       const resetAction = 
           CommonActions.reset({
             index:0,
             routes: [
-              {name: "Home"}
+              {name: "PersonalData"}
             ],
           })
       props.navigation.dispatch(resetAction)
@@ -110,7 +110,6 @@ const SignupScreen = (props) => {
       <TouchableHighlight style={styles.button} underlayColor="#C70F66" onPress={handleSignup}>
         <Text style={styles.buttonTitle}>送信する</Text>
       </TouchableHighlight>
-
     </View>
   );
 }

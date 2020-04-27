@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput,Text } from 'react-native';
 import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -30,7 +31,6 @@ const styles = StyleSheet.create({
 });
 
 const TrainingMemoScreen = (props) => {
-  console.log(props)
   const {trainingMenu,part} = props.route.params
   const [kg,setKg] =useState("")
   const [reps,setReps] =useState("")

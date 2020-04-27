@@ -43,7 +43,10 @@ const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
    
    
    const Item = ( {data, section} ) => (
-    <TouchableHighlight style={styles.item} onPress={()=>navigation.navigate("TrainingMemo",{trainingMenu:data,part:section.title})}>
+    <TouchableHighlight style={styles.item} 
+    // onPress={()=>console.log(data,"data",section,"sec")}
+    onPress={()=>navigation.navigate("TrainingMemo",{trainingMenu:data,part:section.title})}
+    >
         <Text style={styles.title}>{data}</Text> 
     </TouchableHighlight>
   );
@@ -59,7 +62,7 @@ const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
           <View style={styles.labelContainer}>
             <Text style={styles.label}>{title}</Text>
             <TouchableOpacity onPress={()=>navigation.navigate("TrainingAdd",{trainingMenu: title,id:props.id})}>
-              <Text style={styles.addMenu} >+</Text>
+            <Text style={styles.addMenu}>+</Text>
             </TouchableOpacity>
           </View>
         )}
