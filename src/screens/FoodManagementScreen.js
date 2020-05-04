@@ -1,5 +1,5 @@
 import React ,{useState,useEffect}from 'react';
-import { StyleSheet, View,} from 'react-native';
+import { StyleSheet, View,Text} from 'react-native';
 import FoodList from "../components/FoodList"
 import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
@@ -9,28 +9,42 @@ import {Calendar} from 'react-native-calendars'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: "#FFFDF6",
     width: "100%"
   },
+  dotsDescription:{
+    flexDirection:"row",
+    justifyContent:"space-around",
+    backgroundColor:"#fff",
+    paddingBottom:2,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  dotItem:{
+    flexDirection:"row",
+  },
+  calendar:{
+    borderColor: 'gray',
+    height: 350,
+    width:"100%",
+  }
   
 });
 const older = ((a,b)=>(a.date.seconds - b.date.seconds))
+const dateToString = (date)=>{
+  const str = date.toDate().toISOString();
+  return str.split("T")[0]
+}
 
 
 const  FoodManagementScreen = (props)=> {
-  
-  dateToString = (date)=>{
-    const str = date.toDate().toISOString();
-    return str.split("T")[0]
-  }
+
   const [foodData,setFoodData] = useState([])
   const [kcalList,setKcalList] = useState([])
   const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
   const [requiredKcal,setRequiredKcal] = useState([])
-  
-  
+  const [timestamp,setTimestamp] = useState()
+
   useEffect(()=>{
     const {currentUser} = firebase.auth();
     const db =firebase.firestore()
@@ -73,16 +87,19 @@ const  FoodManagementScreen = (props)=> {
       })
       setRequiredKcal(personalData[0].requiredKcal)
     })
+
+    return () => {console.log('Clean Up ')};
    },[])
 
+   //日毎のデータの加工
     const todayFoodList = foodData.filter((item,index,)=>{
       if (dateToString(item.date) === currentDay){
         return true
           }
     })
-
     const todaysFoodData = [...todayFoodList].sort(older)
 
+    //カレンダーに渡すmarkedDateの加工
     const markedDays = [0]
     kcalList.forEach((i)=>{
       if(requiredKcal - i.kcal >= 0){
@@ -106,31 +123,28 @@ const  FoodManagementScreen = (props)=> {
     return (
       <View style={styles.container}>
           <Calendar 
-          onDayPress = {((day)=>{setCurrentDay(day.dateString)})}
-          style={{
-            borderWidth:1,
-            borderColor: "black",
-            height: 350,
-            width:"100%",
-          }}
+          onDayPress = {((day)=>{setCurrentDay(day.dateString),setTimestamp(new Date(day.timestamp))})}
+          style={styles.calendar}
           markedDates = {
             markedDates
-         }
-         markingType={'multi-dot'}
-         theme={{
-          'stylesheet.calendar.header': {
-            week: {
-              marginTop: 0,
-              flexDirection: 'row',
-              justifyContent: "space-between"
-            }
           }
-        }}
-        />
+          markingType={'multi-dot'}
+          />
+          <View style={styles.dotsDescription}>
+            <View style={styles.dotItem}>
+              <Text style={{color:"green",fontWeight:"bold"}}>・</Text>
+              <Text>適正カロリー</Text>
+            </View>
+            <View style={styles.dotItem}>
+              <Text style={{color:"red",fontWeight:"bold"}}>・</Text>
+              <Text>カロリーオーバー</Text>
+            </View>
+          </View>
+        
           <FoodList 
             foodData={todaysFoodData}
             navigation={props.navigation}/>
-        <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("FoodAdd")}/>
+        <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("FoodAdd",{date:timestamp})}/>
       </View>
     ); 
   

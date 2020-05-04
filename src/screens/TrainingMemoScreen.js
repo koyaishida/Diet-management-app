@@ -1,5 +1,5 @@
 import React ,{useState}from 'react';
-import { StyleSheet, View, TextInput,Text } from 'react-native';
+import { StyleSheet, View, TextInput,Text,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
 
@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
 });
 
 const TrainingMemoScreen = (props) => {
-  const {trainingMenu,part} = props.route.params
+
+  const {trainingMenu,part,date} = props.route.params
   const [kg,setKg] =useState("")
   const [reps,setReps] =useState("")
   const [setCount,setSetCount] =useState("")
@@ -46,9 +47,10 @@ const TrainingMemoScreen = (props) => {
         kg : kg,
         reps : reps,
         setCount : setCount,
-        date : new Date(),
+        date : date ? date:new Date(),
        })
       .then(()=> {
+        console.log(date,"date")
         props.navigation.navigate("TrainingMenu")
       })
       .catch((error)=>{
@@ -57,25 +59,27 @@ const TrainingMemoScreen = (props) => {
   }
   
   return (
-    <View style={styles.container}>
-      <View style={styles.inputLocation}>
-        <TextInput multiline style={styles.textInput} value={kg}
-        onChangeText={text => setKg(text)} placeholder="weight 重さ" keyboardType={"numeric"}/>
-        <Text style={styles.unit}>kg</Text>
+    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+      <View  style={styles.container}>
+        <View style={styles.inputLocation}>
+          <TextInput multiline style={styles.textInput} value={kg}
+          onChangeText={text => setKg(text)} placeholder="weight 重さ" keyboardType={"numeric"}/>
+          <Text style={styles.unit}>kg</Text>
+        </View>
+        <View style={styles.inputLocation}>
+          <TextInput multiline style={styles.textInput} value={reps}
+          onChangeText={text => setReps(text)} placeholder="Reps 回数" keyboardType={"numeric"}/>
+          <Text style={styles.unit}>回</Text>
+        </View>
+        
+        <View style={styles.inputLocation}>
+          <TextInput multiline style={styles.textInput} value={setCount}
+          onChangeText={text => setSetCount(text)}  placeholder="set セット数" keyboardType={"numeric"}/>
+          <Text style={styles.unit}>セット</Text>
+        </View>
+        <CircleButton name={"check"} onPress={handleSubmit}/>
       </View>
-      <View style={styles.inputLocation}>
-        <TextInput multiline style={styles.textInput} value={reps}
-        onChangeText={text => setReps(text)} placeholder="Reps 回数" keyboardType={"numeric"}/>
-        <Text style={styles.unit}>回</Text>
-      </View>
-      
-      <View style={styles.inputLocation}>
-        <TextInput multiline style={styles.textInput} value={setCount}
-        onChangeText={text => setSetCount(text)}  placeholder="set セット数" keyboardType={"numeric"}/>
-        <Text style={styles.unit}>セット</Text>
-      </View>
-      <CircleButton name={"check"} onPress={handleSubmit}/>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

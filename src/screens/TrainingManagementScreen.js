@@ -19,6 +19,21 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     backgroundColor:"green",
     color:"#fff",
+  },
+  dotsDescription:{
+    flexDirection:"row",
+    justifyContent:"space-around",
+    backgroundColor:"#fff",
+    paddingBottom:2,
+  },
+  dots:{
+    fontWeight:"bold",
+    fontSize:20,
+  },
+  calendar:{
+    borderColor: 'gray',
+    height: 350,
+    width:"100%",
   }
 });
 const  dateToString = (date)=>{
@@ -30,6 +45,7 @@ const older = ((a,b)=>(a.date.seconds - b.date.seconds))
 const  TrainingManagementScreen = (props)=> {
   const [trainingList,setTrainingList] = useState([])
   const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
+  const [timestamp,setTimestamp] = useState()
 
   useEffect(()=>{
 
@@ -44,14 +60,15 @@ const  TrainingManagementScreen = (props)=> {
        })
        setTrainingList(trainingList)
     })   
-    
-    
+    return () => {console.log('Clean Up ')};
   },[])
+
   const todayTrainingList = trainingList.filter((item,index,)=>{
     if (dateToString(item.date) === currentDay){
       return true
     }
   })
+  
   const sortedTrainingList = [...todayTrainingList].sort(older)
   const dotTrainingList = [...trainingList].sort(older)
 
@@ -126,26 +143,52 @@ const  TrainingManagementScreen = (props)=> {
   const dotDays = Object.assign(...markedList.map(item => ({ [item.date]: item.dot })));
   const markedDays = {...dotDays,[currentDay]:{selected:true,selectedColor:"#ffa500"}}
 
+  
+
     return (
       <View style={styles.container}>
+        
         <Calendar 
-          onDayPress = {((day)=>{setCurrentDay(day.dateString)})}
-          style={{
-            borderColor: 'gray',
-            height: 350,
-            width:"100%"
-          }}
+          onDayPress = {((day)=>{setCurrentDay(day.dateString),setTimestamp(new Date(day.timestamp))})}
+          style={styles.calendar}
           markedDates={
             markedDays
           }
           markingType={'multi-dot'}
         />
+        <View style={styles.dotsDescription}>
+          <View style={styles.dotsDescription}>
+            <Text style={{color:"red",fontWeight:"bold"}}>・</Text>
+            <Text>胸</Text>
+          </View>
+          <View style={styles.dotsDescription}>
+            <Text style={{color:"green",fontWeight:"bold"}}>・</Text>
+            <Text>背中</Text>
+          </View>
+          <View  style={styles.dotsDescription}>
+            <Text style={{color:"blue",fontWeight:"bold"}}>・</Text>
+            <Text>肩</Text>
+          </View>
+          <View style={styles.dotsDescription}>
+            <Text style={{color:"yellow",fontWeight:"bold"}}>・</Text>
+            <Text>腕</Text>
+          </View>
+          <View style={styles.dotsDescription}>
+            <Text style={{color:"purple",fontWeight:"bold"}}>・</Text>
+            <Text>脚</Text>
+          </View>
+          <View style={styles.dotsDescription}>
+            <Text style={{color:"black",fontWeight:"bold"}}>・</Text>
+            <Text>その他</Text>
+          </View>
+        </View>
         <Text style={styles.trainingDay}>{currentDay}のトレーニング記録</Text>
         <TrainingList 
           trainingList={sortedTrainingList}
-          navigation={props.navigation}/>
+          navigation={props.navigation}
+          />
         <CircleButton name={"plus"} 
-        onPress={()=>props.navigation.navigate("TrainingMenu")}
+        onPress={()=>props.navigation.navigate("TrainingMenu",{date:timestamp})}
         /> 
       </View>
     ); 

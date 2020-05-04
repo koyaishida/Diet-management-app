@@ -1,5 +1,5 @@
 import React ,{useState,}from 'react';
-import { StyleSheet, View, TextInput, } from 'react-native';
+import { StyleSheet, View, TextInput, TouchableWithoutFeedback,Keyboard} from 'react-native';
 import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
 
@@ -45,13 +45,15 @@ const TrainingAddScreen = (props) => {
   }
   
   return (
-    <View style={styles.container}>
-        <View  style={styles.inputLocation}>
-          <TextInput multiline style={styles.weightManagementLabel} value={addMenu}
-          onChangeText={text => setAddMenu(text)} placeholder="追加するメニュー名" />
-        </View>
-      <CircleButton name={"check"} onPress={handleSubmit} placeholder="body"/>
-    </View>
+    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+      <View style={styles.container}>
+          <View  style={styles.inputLocation}>
+            <TextInput multiline style={styles.weightManagementLabel} value={addMenu}
+            onChangeText={text => setAddMenu(text)} placeholder="追加するメニュー名" />
+          </View>
+        <CircleButton name={"check"} onPress={handleSubmit} placeholder="body"/>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

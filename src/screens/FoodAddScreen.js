@@ -37,25 +37,32 @@ const styles = StyleSheet.create({
 });
 
 
-const FoodAddScreen = (props) => {
-  const [kcal,setKcal] =useState("")
-  const [foodMemo,setFoodMemo] =useState("")
 
+const FoodAddScreen = (props) => {
+  const [kcal,setKcal] =useState()
+  const [foodMemo,setFoodMemo] =useState()
+  const {date} = props.route.params
   const handleSubmit = () => {
-    
-      const db = firebase.firestore();
-      const {currentUser} = firebase.auth();
-       db.collection(`users/${currentUser.uid}/food`).add({
-         kcal: kcal,
-         foodMemo: foodMemo,
-         date: new Date()
-       })
-      .then(()=> {
-        props.navigation.navigate("FoodManagement")
-      })
-      .catch((error)=>{
-        console.error("Error adding document: ", error);
-      });
+    const db = firebase.firestore();
+    const {currentUser} = firebase.auth();
+     db.collection(`users/${currentUser.uid}/food`).add({
+       kcal: kcal,
+       foodMemo: foodMemo,
+       date: date ? date: new Date()
+     })
+    .then(()=> {
+      props.navigation.navigate("FoodManagement")
+    })
+    .catch((error)=>{
+      console.error("Error adding document: ", error);
+    });
+  } 
+  const disabled =()=>{
+    if(isNaN(parseFloat(kcal)) || kcal === undefined){
+      return true
+    }else{
+      return false
+    }
   }
   
   return (
@@ -68,8 +75,8 @@ const FoodAddScreen = (props) => {
       
 
       <TextInput multiline style={styles.foodMemo} value={foodMemo}
-       onChangeText={text => setFoodMemo(text)}  placeholder="食事内容"/>
-      <CircleButton name={"check"} onPress={handleSubmit}/>
+       onChangeText={text => setFoodMemo(text)} keyboardType={"default"} placeholder="食事内容"/>
+      <CircleButton name={"check"} onPress={handleSubmit} disabled={disabled()}/>
     </View>
   );
 }

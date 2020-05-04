@@ -1,14 +1,16 @@
 import React ,{useState,useEffect}from 'react';
-import { StyleSheet, View, Text,TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text,TouchableOpacity } from 'react-native';
 import firebase from "firebase"
 import {LineChart} from "react-native-chart-kit"
 import CircleButton from "../elements/CircleButton"
+import { FontAwesome } from '@expo/vector-icons';
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFDF6",
-    width: "100%"
+    width: "100%",
   },
   upperContainer :{
     flexDirection: "row",
@@ -17,8 +19,7 @@ const styles = StyleSheet.create({
   },
   upperLeft:{
     width:"50%",
-  }
-  ,
+  },
   upperContainerTitle : {
     fontSize: 18,
     alignSelf: "flex-end"
@@ -44,6 +45,10 @@ const styles = StyleSheet.create({
     fontSize:20,
     color: "#fff",
   },
+  chartArrow:{
+    flexDirection:"row",
+    margin:5,
+  }
 });
 
 const chartConfig = {
@@ -70,8 +75,6 @@ const dateToString = (date)=>{
 const older = ((a,b)=>(a.date.seconds - b.date.seconds))
 
 
-
-
 const HomeScreen = (props)=> {
   const [weightData,setWeightData] = useState([])
   const [weightLabels,setWeightLabels] = useState([])
@@ -80,13 +83,45 @@ const HomeScreen = (props)=> {
   const [kcalList,setKcalList] = useState([0])
   const [currentKcal,setCurrentKcal] = useState([])
   const [kcalLabels,setKcalLabels] = useState([])
+  const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
   const [requiredKcal,setRequiredKcal] = useState([])
   const [targetWeight,setTargetWeight] = useState([])
+  const [amountDisplay,setAmountDisplay] = useState(7)
+  
+
+  const displayChart =(data)=>{
+    if(data.length > amountDisplay){
+      return data.slice(data.length-amountDisplay,data.length-amountDisplay+7)
+    }else if(data.length <= 7){
+       return data 
+    }else if(data.length <= amountDisplay){
+      return data.slice(data.length-data.length,data.length-data.length+7)
+    }
+  }
+
+  const prevChart =()=>{
+    if(weightLabels.length < amountDisplay || kcalLabels.length < amountDisplay){
+      return
+    }else{
+      setAmountDisplay(amountDisplay+7)
+    }
+  }
+
+  const nextChart =()=>{
+    if(amountDisplay == 7){
+      return
+    }else{
+      setAmountDisplay(amountDisplay-7)
+    }
+  }
+  
+  
      
   useEffect (()=>{
     console.log("render")
     const {currentUser} = firebase.auth();
     const db =firebase.firestore()
+    
 
     db.collection(`users/${currentUser.uid}/weight`)
     .onSnapshot((querySnapshot)=>{
@@ -95,39 +130,44 @@ const HomeScreen = (props)=> {
       querySnapshot.forEach((doc)=>{
         weightData.push({...doc.data(),key: doc.id})
       })
-      const sortedWeightData = [...weightData].sort(older)
       setWeightData(weightData)
-      //日付の取得
-      const weightLabels = [];
-      setWeightLabels(weightLabels)
-      sortedWeightData.forEach((a)=>{
-        weightLabels.push(dateToString(a.date).slice(5))
-      })
 
       //体重の値の取得
       const weightList =[]
+      const sortedWeightData = [...weightData].sort(older)
+
       sortedWeightData.forEach((item)=>{
         weightList.push(parseFloat(item.weight))
       })
+      //折れ線グラフエラー回避の為
       if(weightList.length == 0){
         setWeightList([0])
       }else{
-        setWeightList(weightList)
+        setWeightList(displayChart(weightList))
       }
+
+      //体重のラベルの取得
+      const weightLabels = [];
+      
+      sortedWeightData.forEach((a)=>{
+        weightLabels.push(dateToString(a.date).slice(5))
+      })
+      setWeightLabels(displayChart(weightLabels))
     })
 
+    //firebaseから食事データを取得
     db.collection(`users/${currentUser.uid}/food`)
     .onSnapshot((querySnapshot)=>{
       const foodData =[];
-      //firebaseから食事データを取得
       querySnapshot.forEach((doc)=>{
         foodData.push({...doc.data(),key: doc.id})
         })
       setFoodData(foodData)
-      
+    
       //kcalの加工
       const kcalList =[]
       const sortedKcalData = [...foodData].sort(older)
+
       for(let i = 0; i < sortedKcalData.length ; i++){
         if(i === 0){
           kcalList.push(parseFloat(sortedKcalData[i].kcal))
@@ -139,12 +179,13 @@ const HomeScreen = (props)=> {
             }
         }
       }
+
       if(kcalList.length == 0){
         setKcalList([0])
       }else{
-        setKcalList(kcalList)
+        setKcalList(displayChart(kcalList))
       }  
-      setCurrentKcal(kcalList[kcalList.length-1]) 
+      
 
 
       //kcalLabelの加工
@@ -159,10 +200,16 @@ const HomeScreen = (props)=> {
             }
         }
       }
-      setKcalLabels(kcalLabels)
+      setKcalLabels(displayChart(kcalLabels))
+
+      if(kcalLabels[kcalLabels.length-1] !== currentDay.slice(5)){
+        setCurrentKcal(0)
+      }else{
+        setCurrentKcal(kcalList[kcalList.length-1])
+      }
     })
 
-    
+  
     db.collection(`users/${currentUser.uid}/personalData`)
     .onSnapshot((querySnapshot)=>{
       const personalData = []
@@ -172,12 +219,8 @@ const HomeScreen = (props)=> {
       setRequiredKcal(personalData[0].requiredKcal)
       setTargetWeight(personalData[0].targetWeight)
     })
-
-      if (weightData == null) { return null; }
-      if (foodData == null) { return null; }
-     return () => {console.log('Clean Up ')};
-  },[])
-
+    return () => {console.log('Clean Up ')};
+  },[amountDisplay])
   
         
   
@@ -185,7 +228,7 @@ const HomeScreen = (props)=> {
     <View style={styles.container}>
       <View  style={styles.upperContainer}>
         <View style={styles.upperLeft}>
-          <Text style={styles.upperContainerTitle}>必要摂取カロリーまで</Text>
+          <Text style={styles.upperContainerTitle}>必要摂取カロリー</Text>
           <Text style={styles.upperContainerText}>{`${requiredKcal-currentKcal} kcal`}</Text>
         </View>
 
@@ -194,51 +237,69 @@ const HomeScreen = (props)=> {
           <Text style={styles.upperContainerText}>{`${Math.round((weightList[weightList.length-1]-targetWeight)*10)/10} kg`}</Text>
         </View>
       </View>
-        <LineChart 
-          data = {{
-            labels: weightLabels,
-            datasets: [{data:weightList}]
-          }}
-          formatYLabel={decimalPoint}
-          yAxisSuffix=" kg"
-          style={styles.lineChart} 
-          width={400} height={200} 
-          chartConfig={chartConfig}
-          withInnerLines={false}
-          withOuterLines={false}
-        />
-        <LineChart 
-          data = {{
-              labels: kcalLabels,
-              datasets: [{data:kcalList}
-          ]}
-        }
-          formatYLabel={toInteger}
-          yAxisSuffix="kcal"
-          style={styles.lineChart} 
-          width={400} height={200} 
-          chartConfig={chartConfig}
-          withInnerLines={false}
-          withOuterLines={false}
-          /> 
 
-      <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-        onPress={()=>props.navigation.navigate("TrainingManagement")}>
-        <Text style={styles.buttonTitle}>今日のトレーニング
-        </Text>
-      </TouchableHighlight> 
+      <LineChart 
+        data = {{
+          labels: weightLabels,
+          datasets: [{data:weightList}]
+        }}
+        formatYLabel={decimalPoint}
+        yAxisSuffix=" kg"
+        style={styles.lineChart} 
+        width={400} height={180} 
+        chartConfig={chartConfig}
+        withInnerLines={false}
+        withOuterLines={false}
+      />
+      <LineChart 
+        data = {{
+          labels: kcalLabels,
+          datasets: [{data:kcalList}]
+        }}
+        formatYLabel={toInteger}
+        yAxisSuffix="kcal"
+        style={styles.lineChart} 
+        width={400} height={180} 
+        chartConfig={chartConfig}
+        withInnerLines={false}
+        withOuterLines={false}
+      />
+      <View style={{flexDirection:"row",justifyContent:"space-around",backgroundColor:"#fff"}}>
+        <TouchableOpacity onPress={prevChart} activeOpacity={0.5}>
+          <View style={styles.chartArrow}>
+            <Text>
+              <FontAwesome name={"angle-double-left"} size={20}/>
+            </Text>
+            <Text style={{fontSize:18,marginLeft:5,}}>BACK</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={nextChart} activeOpacity={0.5}> 
+          <View style={styles.chartArrow}>
+            <Text style={{fontSize:18,marginRight:5,}}>NEXT</Text>
+            <Text>
+              <FontAwesome name={"angle-double-right"} size={20}/>
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={{marginTop:20}}>
+        <TouchableOpacity style={styles.button} activeOpacity={0.5}
+          onPress={()=>props.navigation.navigate("TrainingManagement")}>
+          <Text style={styles.buttonTitle}>今日のトレーニング
+          </Text>
+        </TouchableOpacity> 
 
-      <TouchableHighlight style={styles.button} 
-        underlayColor="#C70F66"
-        onPress={()=>props.navigation.navigate("FoodManagement")}>
-        <Text style={styles.buttonTitle}>今日の食事</Text>
-      </TouchableHighlight>
+        <TouchableOpacity style={styles.button} activeOpacity={0.5}
+          onPress={()=>props.navigation.navigate("FoodManagement")}>
+          <Text style={styles.buttonTitle}>今日の食事</Text>
+        </TouchableOpacity>
 
-      <TouchableHighlight style={styles.button} underlayColor="#C70F66"
-        onPress={()=>props.navigation.navigate("WeightManagement")}>
-      <Text style={styles.buttonTitle} >今日の体重</Text>
-      </TouchableHighlight>
-      <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")}/>
+        <TouchableOpacity style={styles.button} activeOpacity={0.5}
+          onPress={()=>props.navigation.navigate("WeightManagement")}>
+        <Text style={styles.buttonTitle} >今日の体重</Text>
+        </TouchableOpacity>
+      </View>
+      <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")} display={false}/>
     </View>
   ); 
 }

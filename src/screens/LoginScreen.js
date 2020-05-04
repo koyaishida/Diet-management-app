@@ -73,8 +73,20 @@ const LoginScreen = (props) => {
         console.log(error)
         console.log("error")
       })
-    
   }
+  const resetPassword =()=>{
+    const auth = firebase.auth();
+    // const emailAddress = "user@example.com";
+
+    auth.sendPasswordResetEmail(email).then(function() {
+      // Email sent.
+      alert(`${email}にメールを送信しました。`)
+    }).catch(function(error) {
+      // An error happened.
+      console.log(error)
+    });
+  }
+  
   const switchToSignup = ()=>[
     props.navigation.navigate("Signup")
   ]
@@ -83,8 +95,16 @@ const LoginScreen = (props) => {
     <View style={styles.container}>
 
       <TextInput style={styles.input} value={email} placeholder="Email" 
-      onChangeText={text => setEmail(text)} autoCapitalize="none" autoCorrect={false}/>
-      <TextInput style={styles.input} value={password} placeholder="Password" onChangeText={text => setPassword(text)} autoCapitalize="none" autoCorrect={false} secureTextEntry={true}/>
+        onChangeText={text => setEmail(text)} autoCapitalize="none" autoCorrect={false}/>
+      <TextInput style={styles.input} value={password} placeholder="Password" 
+       onChangeText={text=>setPassword(text)} autoCapitalize="none" autoCorrect={false}
+       secureTextEntry={true}/>
+
+      <TouchableOpacity  style={styles.toSignup} onPress={resetPassword}>
+        <Text style={styles.signupText}>
+          パスワードを忘れた方はこちら
+        </Text>
+      </TouchableOpacity>
 
       <TouchableHighlight style={styles.button} underlayColor="#C70F66"
         onPress={handleLogin}>
@@ -95,6 +115,7 @@ const LoginScreen = (props) => {
           新規登録はこちら
         </Text>
       </TouchableOpacity>
+      
 
     </View>
   );

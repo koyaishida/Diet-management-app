@@ -1,84 +1,133 @@
-import React ,{useState}from 'react';
-import { StyleSheet, View, TextInput,Text,  } from 'react-native';
+import React ,{useState,useEffect}from 'react';
+import { StyleSheet, View,TouchableWithoutFeedback,Keyboard,Text } from 'react-native';
 import CircleButton from "../elements/CircleButton"
+import { Input,} from 'react-native-elements'
+import {Calendar} from 'react-native-calendars'
 import firebase from "firebase"
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFDF6",
-    width: "100%"
+    width: "100%",
+    padding:20,
   },
-  label : {
-    fontSize: 32,
-    padding : 20,
-  },
-  wightManagementLabel: {
-    paddingTop: 32,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingBottom: 16,
-    fontSize: 24,
-    margin: 10,
-    backgroundColor: "#fff",
-    textAlign: "center",
-    width: "80%"
-  },
-  inputLocation :{
-    flexDirection : "row",
-  },
-  unit : {
-    fontSize : 30,
-    marginTop :40,
-  },
+  calendar:{
+    borderColor: 'gray',
+    height: 350,
+    width:"100%",
+    marginTop:100,
+  }
 });
-
+const  dateToString = (date)=>{
+  const str = date.toDate().toISOString();
+  return str.split("T")[0]
+}
 
 const WeightManagementScreen = (props) => {
   const [weight,setWeight] =useState("")
   const [bodyFatPercentage,setBodyFatPercentage] =useState("")
+  const [weightList,setWeightList] = useState([])
+  const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
+  
+
+
+  useEffect(()=>{
+
+    const {currentUser} = firebase.auth();
+    const db =firebase.firestore()
+
+    db.collection(`users/${currentUser.uid}/weight`)
+     .onSnapshot((querySnapshot)=>{
+       const weightList = []
+       querySnapshot.forEach((doc)=>{
+         weightList.push({...doc.data(),key: doc.id})
+       })
+       setWeightList(weightList)
+    })   
+    
+    
+    return () => {console.log('Clean Up ')};
+  },[currentDay])
+
+  // const todayWeightList = weightList.filter((item,index,)=>{
+  //   if (dateToString(item.date) === currentDay){
+  //     return true
+  //   }
+  // })
+  const disabled =()=>{
+    if(isNaN(parseFloat(weight)) || weight === undefined){
+      return true
+    }else{
+      return false
+    }
+  }
+
 
   //体重の値が０の時エラーにある為、後日修正
-  const handleSubmit = () => {
-    console.log("press")
-     const db = firebase.firestore();
-     const {currentUser} = firebase.auth();
-      db.collection(`users/${currentUser.uid}/weight`).add({
-           weight : weight,
-           bodyFatPercentage : bodyFatPercentage,
-           date: new Date()
+   const handleSubmit = () => {
+     console.log("press")
+      const db = firebase.firestore();
+      const {currentUser} = firebase.auth();
+       db.collection(`users/${currentUser.uid}/weight`).add({
+            weight : weight,
+            bodyFatPercentage : bodyFatPercentage,
+            date: new Date()
+       })
+      .then(()=> {
+        props.navigation.navigate("Home")
+        console.log("then")
       })
-     .then(()=> {
-       props.navigation.navigate("Home")
-       console.log("then")
-     })
-     .catch((error)=>{
-       console.error("Error adding document: ", error);
-     });
+      .catch((error)=>{
+        console.error("Error adding document: ", error);
+      });
   }
   
+  
   return (
-    <View style={styles.container}>
-      <View>
-        <Text style={styles.label}>体重（kg）</Text>
-        <View style={styles.inputLocation}>
-          <TextInput multiline style={styles.wightManagementLabel} value={weight}
-          onChangeText={text => setWeight(text)} placeholder="ここに入力" keyboardType={"numeric"}/>
-          <Text style={styles.unit}>kg</Text>
-        </View>
+    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+      <View style={styles.container}>
+        {/* <Calendar 
+        onDayPress = {((day)=>{setCurrentDay(day.dateString)})}
+        style={{
+          borderColor: 'gray',
+          height: 350,
+          width:"100%"
+        }}
+         markedDates={
+           {[currentDay]:{selected:true,selectedColor:"#ffa500"}}
+         }
+        markingType={'multi-dot'}/> */}
+        <Input
+          label="体重 (kg)"
+          placeholder="半角数字で入力して下さい"
+          value={weight}
+          inputStyle={{padding:10}}
+          labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
+          onChangeText={text => setWeight(text)}
+          keyboardType={"numeric"}
+        />
+        <Input
+          label="体脂肪率 (%)"
+          placeholder="半角数字で入力して下さい"
+          value={bodyFatPercentage}
+          inputStyle={{padding:10}}
+          labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
+          onChangeText={text => setBodyFatPercentage(text)}
+          keyboardType={"numeric"}
+        />
+        {/* <Calendar 
+        onDayPress = {((day)=>{setCurrentDay(day.dateString)})}
+        style={styles.calendar}
+         markedDates={
+           {[currentDay]:{selected:true,selectedColor:"#ffa500"}}
+         }
+        markingType={'multi-dot'}/> */}
+        <CircleButton name={"check"} onPress={handleSubmit} placeholder="body" 
+        // style={{position: "absolute",top: 180,right: 32,}}
+        disabled={disabled()}/>
       </View>
-
-      <View>
-        <Text style={styles.label}>体脂肪率（％）</Text>
-        <View  style={styles.inputLocation}>
-          <TextInput multiline style={styles.wightManagementLabel} value={bodyFatPercentage}
-          onChangeText={text => setBodyFatPercentage(text)} placeholder="ここに入力" keyboardType={"numeric"}/>
-          <Text style={styles.unit}>%</Text>
-        </View>
-      </View>
-      
-      <CircleButton name={"check"} onPress={handleSubmit} placeholder="body"/>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
