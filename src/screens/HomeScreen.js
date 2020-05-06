@@ -1,10 +1,13 @@
 import React ,{useState,useEffect}from 'react';
-import { StyleSheet, View, Text,TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text,TouchableOpacity,ScrollView ,Dimensions} from 'react-native';
 import firebase from "firebase"
 import {LineChart} from "react-native-chart-kit"
 import CircleButton from "../elements/CircleButton"
 import { FontAwesome } from '@expo/vector-icons';
 
+
+const screenWidth = Dimensions.get("window").width
+const screenHeight = Dimensions.get("window").height
 
 const styles = StyleSheet.create({
   container: {
@@ -14,7 +17,7 @@ const styles = StyleSheet.create({
   },
   upperContainer :{
     flexDirection: "row",
-    padding:20,
+     padding:10,
     paddingRight:30,
   },
   upperLeft:{
@@ -28,12 +31,9 @@ const styles = StyleSheet.create({
     fontSize: 22,
     alignSelf: "flex-end"
   },
-  lineChart: {
-    alignItems: "center",
-  },
   button: {
     backgroundColor: "green",
-    height: 48,
+    height: screenHeight/20,
     borderRadius: 14,
     justifyContent: "center",
     alignItems: "center",
@@ -225,10 +225,11 @@ const HomeScreen = (props)=> {
         
   
   return (
+    // <ScrollView>
     <View style={styles.container}>
       <View  style={styles.upperContainer}>
         <View style={styles.upperLeft}>
-          <Text style={styles.upperContainerTitle}>必要摂取カロリー</Text>
+          <Text style={styles.upperContainerTitle}>必要摂取カロリーまで</Text>
           <Text style={styles.upperContainerText}>{`${requiredKcal-currentKcal} kcal`}</Text>
         </View>
 
@@ -246,7 +247,7 @@ const HomeScreen = (props)=> {
         formatYLabel={decimalPoint}
         yAxisSuffix=" kg"
         style={styles.lineChart} 
-        width={400} height={180} 
+        width={screenWidth} height={screenHeight/4.2} 
         chartConfig={chartConfig}
         withInnerLines={false}
         withOuterLines={false}
@@ -259,7 +260,7 @@ const HomeScreen = (props)=> {
         formatYLabel={toInteger}
         yAxisSuffix="kcal"
         style={styles.lineChart} 
-        width={400} height={180} 
+        width={screenWidth} height={screenHeight/4.2} 
         chartConfig={chartConfig}
         withInnerLines={false}
         withOuterLines={false}
@@ -285,22 +286,24 @@ const HomeScreen = (props)=> {
       <View style={{marginTop:20}}>
         <TouchableOpacity style={styles.button} activeOpacity={0.5}
           onPress={()=>props.navigation.navigate("TrainingManagement")}>
-          <Text style={styles.buttonTitle}>今日のトレーニング
+          <Text style={styles.buttonTitle}>トレーニング管理
           </Text>
         </TouchableOpacity> 
 
         <TouchableOpacity style={styles.button} activeOpacity={0.5}
           onPress={()=>props.navigation.navigate("FoodManagement")}>
-          <Text style={styles.buttonTitle}>今日の食事</Text>
+          <Text style={styles.buttonTitle}>食事管理</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} activeOpacity={0.5}
           onPress={()=>props.navigation.navigate("WeightManagement")}>
-        <Text style={styles.buttonTitle} >今日の体重</Text>
+        <Text style={styles.buttonTitle} >体重管理</Text>
         </TouchableOpacity>
       </View>
       <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")} display={false}/>
     </View>
+    
+    // </ScrollView>
   ); 
 }
 

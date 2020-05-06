@@ -7,6 +7,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import WeightManagementScreen from './src/screens/WeightManagementScreen';
+import WeightAddScreen from './src/screens/WeightAddScreen';
 import FoodManagementScreen from './src/screens/FoodManagementScreen';
 import FoodAddScreen from './src/screens/FoodAddScreen';
 import TrainingManagementScreen from './src/screens/TrainingManagementScreen';
@@ -43,9 +44,10 @@ firebase.initializeApp(firebaseConfig);
      <NavigationContainer>
        <Stack.Navigator>  
          <Stack.Screen name="Login" component={LoginScreen}
-          options={{ title: "ログイン" }} /> 
+          options={{ title: "ログイン",headerTextStyle:{
+            textAlign:"center",flexGrow:1,borderWidth:2}}} /> 
         <Stack.Screen name="Home" component={HomeScreen} 
-          options={{ title: "HOME" }}/> 
+          options={{ title: "HOME"}}/> 
          
          <Stack.Screen name="Signup" component={SignupScreen} 
           options={{ title: "新規登録" }}/>
@@ -53,7 +55,8 @@ firebase.initializeApp(firebaseConfig);
          <Stack.Screen name="PersonalData" component={PersonalDataScreen}
           options={{ title: "設定" }} /> 
          
-         <Stack.Screen name="WeightManagement" component={WeightManagementScreen} 
+         <Stack.Screen name="WeightManagement" component={WeightManagementScreen} />
+         <Stack.Screen name="WeightAdd" component={WeightAddScreen} 
           options={{ title: "体重管理" }}/>   
          <Stack.Screen name="FoodManagement" component={FoodManagementScreen} 
           options={{ title: "食事管理" }}/>   

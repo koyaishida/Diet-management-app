@@ -1,36 +1,54 @@
 import React ,{useState,useEffect}from 'react';
-import { StyleSheet, View,TouchableWithoutFeedback,Keyboard,Text } from 'react-native';
+import { StyleSheet, View,Text} from 'react-native';
+import WeightList from "../components/WeightList"
 import CircleButton from "../elements/CircleButton"
-import { Input,} from 'react-native-elements'
-import {Calendar} from 'react-native-calendars'
 import firebase from "firebase"
+import {Calendar} from 'react-native-calendars'
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFDF6",
-    width: "100%",
-    padding:20,
+    width: "100%"
+  },
+  dotsDescription:{
+    flexDirection:"row",
+    justifyContent:"space-around",
+    backgroundColor:"#fff",
+    paddingBottom:2,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  dotItem:{
+    flexDirection:"row",
   },
   calendar:{
     borderColor: 'gray',
     height: 350,
     width:"100%",
-    marginTop:100,
-  }
+  },
+  date:{
+    textAlign:"center",
+    fontSize:20,
+    fontWeight:"bold",
+    backgroundColor:"green",
+    color:"#fff",
+  },
+  
 });
-const  dateToString = (date)=>{
+const older = ((a,b)=>(a.date.seconds - b.date.seconds))
+const dateToString = (date)=>{
   const str = date.toDate().toISOString();
   return str.split("T")[0]
 }
 
-const WeightManagementScreen = (props) => {
-  const [weight,setWeight] =useState("")
-  const [bodyFatPercentage,setBodyFatPercentage] =useState("")
-  const [weightList,setWeightList] = useState([])
-  const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
-  
 
+const  WeightManagementScreen = (props)=> {
+
+  const [weightDataList,setWeightDataList] = useState([])
+  const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
+  const [timestamp,setTimestamp] = useState()
 
   useEffect(()=>{
 
@@ -43,92 +61,69 @@ const WeightManagementScreen = (props) => {
        querySnapshot.forEach((doc)=>{
          weightList.push({...doc.data(),key: doc.id})
        })
-       setWeightList(weightList)
-    })   
-    
+       setWeightDataList(weightList)
+    })
     
     return () => {console.log('Clean Up ')};
   },[currentDay])
 
-  // const todayWeightList = weightList.filter((item,index,)=>{
-  //   if (dateToString(item.date) === currentDay){
-  //     return true
-  //   }
-  // })
-  const disabled =()=>{
-    if(isNaN(parseFloat(weight)) || weight === undefined){
-      return true
-    }else{
-      return false
-    }
-  }
+   //日毎のデータの加工
+     const todayWeightList = weightDataList.filter((item,index,)=>{
+       if (dateToString(item.date) === currentDay){
+         return true
+           }
+     })
+     const todaysWeightData = [...todayWeightList].sort(older)
+
+     //カレンダーに渡すmarkedDateの加工
+    // const markedDays = [0]
+    // kcalList.forEach((i)=>{
+    //   if(requiredKcal - i.kcal >= 0){
+    //     markedDays.push({
+    //       date:i.date,
+    //       dot:{dots:[{color:"green"}]}
+    //     })
+    //   }else if(requiredKcal - i.kcal < 0){
+    //     markedDays.push({
+    //       date:i.date,
+    //       dot:{dots:[{color:"red"}]}
+    //     })
+    //   }
+    // })
+    // const dotDays = Object.assign(...markedDays.map(item => ({ [item.date]: item.dot })))
+    // const markedDates = {...dotDays,[currentDay]:{selected:true,selectedColor:"#ffa500"}}
+
+    
 
 
-  //体重の値が０の時エラーにある為、後日修正
-   const handleSubmit = () => {
-     console.log("press")
-      const db = firebase.firestore();
-      const {currentUser} = firebase.auth();
-       db.collection(`users/${currentUser.uid}/weight`).add({
-            weight : weight,
-            bodyFatPercentage : bodyFatPercentage,
-            date: new Date()
-       })
-      .then(()=> {
-        props.navigation.navigate("Home")
-        console.log("then")
-      })
-      .catch((error)=>{
-        console.error("Error adding document: ", error);
-      });
-  }
-  
-  
-  return (
-    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+    return (
       <View style={styles.container}>
-        {/* <Calendar 
-        onDayPress = {((day)=>{setCurrentDay(day.dateString)})}
-        style={{
-          borderColor: 'gray',
-          height: 350,
-          width:"100%"
-        }}
-         markedDates={
-           {[currentDay]:{selected:true,selectedColor:"#ffa500"}}
-         }
-        markingType={'multi-dot'}/> */}
-        <Input
-          label="体重 (kg)"
-          placeholder="半角数字で入力して下さい"
-          value={weight}
-          inputStyle={{padding:10}}
-          labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
-          onChangeText={text => setWeight(text)}
-          keyboardType={"numeric"}
-        />
-        <Input
-          label="体脂肪率 (%)"
-          placeholder="半角数字で入力して下さい"
-          value={bodyFatPercentage}
-          inputStyle={{padding:10}}
-          labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
-          onChangeText={text => setBodyFatPercentage(text)}
-          keyboardType={"numeric"}
-        />
-        {/* <Calendar 
-        onDayPress = {((day)=>{setCurrentDay(day.dateString)})}
-        style={styles.calendar}
-         markedDates={
-           {[currentDay]:{selected:true,selectedColor:"#ffa500"}}
-         }
-        markingType={'multi-dot'}/> */}
-        <CircleButton name={"check"} onPress={handleSubmit} placeholder="body" 
-        // style={{position: "absolute",top: 180,right: 32,}}
-        disabled={disabled()}/>
+          <Calendar 
+          onDayPress = {((day)=>{setCurrentDay(day.dateString),setTimestamp(new Date(day.timestamp))})}
+          style={styles.calendar}
+          // markedDates = {
+          //   markedDates
+          // }
+          markingType={'multi-dot'}
+          />
+          <View style={styles.dotsDescription}>
+            <View style={styles.dotItem}>
+              <Text style={{color:"green",fontWeight:"bold"}}>・</Text>
+              <Text>適正カロリー</Text>
+            </View>
+            <View style={styles.dotItem}>
+              <Text style={{color:"red",fontWeight:"bold"}}>・</Text>
+              <Text>カロリーオーバー</Text>
+            </View>
+          </View>
+          <Text style={styles.date}>{currentDay}の体重記録</Text>
+          <WeightList 
+            weightData={todaysWeightData}
+            navigation={props.navigation}/>
+          <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("WeightAdd",{date:timestamp})}/>
       </View>
-    </TouchableWithoutFeedback>
-  );
+    ); 
+  
 }
 
 export default WeightManagementScreen
