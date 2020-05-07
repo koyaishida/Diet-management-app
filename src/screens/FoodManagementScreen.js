@@ -73,7 +73,7 @@ const  FoodManagementScreen = (props)=> {
       }
 
       if(kcalList.length == 0){
-        setKcalList()
+        setKcalList([0])
       }else{
         setKcalList(kcalList)
       }

@@ -54,7 +54,7 @@ const TrainingMemoScreen = (props) => {
         props.navigation.navigate("TrainingMenu")
       })
       .catch((error)=>{
-        console.error("Error adding document: ", error);
+        console.log("Error adding document: ", error);
       });
   }
   

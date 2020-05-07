@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     zIndex: 1,
+    elevation:4,
   },
   memoAddButton: {
     fontSize: 24,

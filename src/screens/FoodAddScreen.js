@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     fontSize: 18,
     color: "black",
-    backgroundColor: "#FFF"
+    backgroundColor: "#FFF",
+    textAlignVertical:"top"
   },
   inputLocation :{
     flexDirection : "row",

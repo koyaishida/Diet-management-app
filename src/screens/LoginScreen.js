@@ -4,6 +4,7 @@ import firebase from "firebase"
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native'
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -57,23 +58,68 @@ const LoginScreen = (props) => {
 
   const handleLogin = () =>{
     firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(()=>{
-        console.log("success")
-         const resetAction = 
-           CommonActions.reset({
-             index:0,
-             routes: [
-               {name: "Home"}
-             ],
-           })
-         props.navigation.dispatch(resetAction)
-      })
+    .then(()=>{
+      console.log("success")
+        const resetAction = 
+          CommonActions.reset({
+            index:0,
+            routes: [
+              {name: "Home"}
+            ],
+          })
+        props.navigation.dispatch(resetAction)
+    })
 
-      .catch((error)=>{
-        console.log(error)
-        console.log("error")
-      })
+    .catch((error)=>{
+      console.log(error)
+      const errorMessage =()=>{
+        switch (error.code) {
+          case 'auth/cancelled-popup-request':
+          case 'auth/popup-closed-by-user':
+              return null;
+          case 'auth/email-already-in-use':
+            if (method.indexOf('signup') !== -1) {
+              return 'このメールアドレスは使用されています';
+            } else {
+              return 'メールアドレスまたはパスワードが違います';
+            }
+          case 'auth/invalid-email':
+            return 'メールアドレスの形式が正しくありません';
+          case 'auth/user-disabled':
+            return 'サービスの利用が停止されています';
+          case 'auth/user-not-found':
+            return 'メールアドレスまたはパスワードが違います';
+          case 'auth/user-mismatch':
+            if (method === 'signin/popup') {
+              return '認証されているユーザーと異なるアカウントが選択されました';
+            } else {
+              return 'メールアドレスまたはパスワードが違います';
+            }
+          case 'auth/weak-password':
+            return 'パスワードは6文字以上にしてください';
+          case 'auth/wrong-password':
+            return 'メールアドレスまたはパスワードが違います';
+          case 'auth/popup-blocked':
+            return '認証ポップアップがブロックされました。ポップアップブロックをご利用の場合は設定を解除してください';
+          case 'auth/operation-not-supported-in-this-environment':
+          case 'auth/auth-domain-config-required':
+          case 'auth/operation-not-allowed':
+          case 'auth/unauthorized-domain':
+            return '現在この認証方法はご利用頂けません';
+          case 'auth/requires-recent-login':
+            return '認証の有効期限が切れています';
+          default:
+            if (method.indexOf('signin') !== -1) {
+              return '認証に失敗しました。しばらく時間をおいて再度お試しください';
+            } else {
+              return 'エラーが発生しました。しばらく時間をおいてお試しください';
+            }
+        }
+      }
+      alert(errorMessage())
+    })   
   }
+  
   const resetPassword =()=>{
     const auth = firebase.auth();
     // const emailAddress = "user@example.com";
@@ -81,9 +127,10 @@ const LoginScreen = (props) => {
     auth.sendPasswordResetEmail(email).then(function() {
       // Email sent.
       alert(`${email}にメールを送信しました。`)
-    }).catch(function(error) {
+    }).catch(function(e) {
       // An error happened.
       console.log(error)
+      
     });
   }
   
