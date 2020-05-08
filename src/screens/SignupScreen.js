@@ -22,13 +22,8 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontSize: 18,
   },
-  title: {
-    fontSize: 28,
-    marginBottom: 24,
-    alignSelf: "center"
-  },
   button: {
-    backgroundColor: "#E31676",
+    backgroundColor: "#008000",
     height: 48,
     borderRadius: 14,
     justifyContent: "center",
@@ -143,13 +138,9 @@ const SignupScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        新規登録
-      </Text>
+      
       <TextInput style={styles.input} value={email} placeholder="Email" 
       onChangeText={text => setEmail(text)} autoCapitalize="none" autoCorrect={false}/>
-
-      {/* onChangeではなくonChangeText */}
       <TextInput style={styles.input} value={password} placeholder="Password" onChangeText={text => setPassword(text)} autoCapitalize="none" autoCorrect={false} secureTextEntry={true}/>
       
       <TouchableHighlight style={styles.button} underlayColor="#C70F66" onPress={handleSignup}>

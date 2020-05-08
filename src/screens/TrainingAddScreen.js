@@ -1,13 +1,15 @@
 import React ,{useState,}from 'react';
-import { StyleSheet, View, TextInput, TouchableWithoutFeedback,Keyboard} from 'react-native';
+import { StyleSheet, View, TouchableWithoutFeedback,Keyboard} from 'react-native';
 import CircleButton from "../elements/CircleButton"
+import { Input,} from 'react-native-elements'
 import firebase from "firebase"
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFDF6",
-    width: "100%"
+    width: "100%",
+    padding:20
   },
   label : {
     fontSize: 32,
@@ -47,10 +49,15 @@ const TrainingAddScreen = (props) => {
   return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
-          <View  style={styles.inputLocation}>
-            <TextInput multiline style={styles.weightManagementLabel} value={addMenu}
-            onChangeText={text => setAddMenu(text)} placeholder="追加するメニュー名" />
-          </View>
+        <Input
+          label={`追加するメニュー名 （${part}）`}
+          placeholder="ここに入力して下さい"
+          value={addMenu}
+          inputStyle={{padding:10}}
+          labelStyle={{paddingTop:5,color:"black",fontSize:20,fontWeight:"100"}}
+          onChangeText={text => setAddMenu(text)}
+        />
+
         <CircleButton name={"check"} onPress={handleSubmit} placeholder="body"/>
       </View>
     </TouchableWithoutFeedback>

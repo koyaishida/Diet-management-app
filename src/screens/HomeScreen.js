@@ -12,7 +12,7 @@ const screenHeight = Dimensions.get("window").height
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFDF6",
+    backgroundColor:"#FFFDF6",
     width: "100%",
   },
   upperContainer :{
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     height: screenHeight/20,
     borderRadius: 14,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems:"center",
     width: "75%",
     alignSelf: "center",
     marginTop: 10,
@@ -45,16 +45,30 @@ const styles = StyleSheet.create({
     fontSize:20,
     color: "#fff",
   },
+  arrowContainer:{
+    flexDirection:"row",
+    justifyContent:"space-around",
+    backgroundColor:"#FFF"
+  },
   chartArrow:{
     flexDirection:"row",
     margin:5,
+  },
+  chartTitle:{
+    fontSize:18,
+    width:"90%",
+    alignSelf: "center",
+    padding:5,
+  },
+  chartTitleValue:{
+    fontSize:22,
   }
 });
 
 const chartConfig = {
-  backgroundColor: '#fff',
-  backgroundGradientFrom: '#fff',
-  backgroundGradientTo: '#fff',
+  backgroundColor: "#FFF",
+  backgroundGradientFrom: "#FFF",
+  backgroundGradientTo: "#FFF",
   color: (opacity = 0.5) => `rgba(0, 0, 0,0.5)`,
 }
 
@@ -225,20 +239,13 @@ const HomeScreen = (props)=> {
         
   
   return (
-    // <ScrollView>
     <View style={styles.container}>
-      <View  style={styles.upperContainer}>
-        <View style={styles.upperLeft}>
-          <Text style={styles.upperContainerTitle}>必要摂取カロリーまで</Text>
-          <Text style={styles.upperContainerText}>{`${requiredKcal-currentKcal} kcal`}</Text>
-        </View>
-
-        <View style={styles.upperLeft}>
-          <Text style={styles.upperContainerTitle}>目標体重まで</Text>
-          <Text style={styles.upperContainerText}>{`${Math.round((weightList[weightList.length-1]-targetWeight)*10)/10} kg`}</Text>
-        </View>
+      <View style={{backgroundColor:"#fff"}}>
+      <Text style={styles.chartTitle}>目標体重まであと
+        <Text style={styles.chartTitleValue}> {`${Math.round((weightList[weightList.length-1]-targetWeight)*10)/10}`}</Text> 
+        kg
+      </Text>
       </View>
-
       <LineChart 
         data = {{
           labels: weightLabels,
@@ -252,6 +259,13 @@ const HomeScreen = (props)=> {
         withInnerLines={false}
         withOuterLines={false}
       />
+      <View style={{backgroundColor:"#fff"}}>
+      <Text style={styles.chartTitle}>必要摂取カロリーまであと
+        <Text style={styles.chartTitleValue}> {`${requiredKcal-currentKcal}`}</Text>
+        kcal
+      </Text>
+      </View>
+      
       <LineChart 
         data = {{
           labels: kcalLabels,
@@ -265,7 +279,8 @@ const HomeScreen = (props)=> {
         withInnerLines={false}
         withOuterLines={false}
       />
-      <View style={{flexDirection:"row",justifyContent:"space-around",backgroundColor:"#fff"}}>
+      
+      <View style={styles.arrowContainer}>
         <TouchableOpacity onPress={prevChart} activeOpacity={0.5}>
           <View style={styles.chartArrow}>
             <Text>
@@ -302,8 +317,6 @@ const HomeScreen = (props)=> {
       </View>
       <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")} display={false}/>
     </View>
-    
-    // </ScrollView>
   ); 
 }
 

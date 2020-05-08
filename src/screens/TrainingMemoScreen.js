@@ -1,6 +1,7 @@
 import React ,{useState}from 'react';
 import { StyleSheet, View, TextInput,Text,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import CircleButton from "../elements/CircleButton"
+import { Input,} from 'react-native-elements'
 import firebase from "firebase"
 
 
@@ -9,24 +10,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFDF6",
     width: "100%",
-  },
-  textInput: {
-    paddingTop: 32,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingBottom: 16,
-    fontSize: 24,
-    width: "70%",
-    backgroundColor:"#FFFDF6",
-    borderBottomColor: "#ddd",
-    borderBottomWidth:1
-  },
-  inputLocation :{
-    flexDirection : "row",
-  },
-  unit : {
-    fontSize : 30,
-    marginTop :40,
+    padding:30,
   },
 });
 
@@ -61,22 +45,31 @@ const TrainingMemoScreen = (props) => {
   return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View  style={styles.container}>
-        <View style={styles.inputLocation}>
-          <TextInput multiline style={styles.textInput} value={kg}
-          onChangeText={text => setKg(text)} placeholder="weight 重さ" keyboardType={"numeric"}/>
-          <Text style={styles.unit}>kg</Text>
-        </View>
-        <View style={styles.inputLocation}>
-          <TextInput multiline style={styles.textInput} value={reps}
-          onChangeText={text => setReps(text)} placeholder="Reps 回数" keyboardType={"numeric"}/>
-          <Text style={styles.unit}>回</Text>
-        </View>
-        
-        <View style={styles.inputLocation}>
-          <TextInput multiline style={styles.textInput} value={setCount}
-          onChangeText={text => setSetCount(text)}  placeholder="set セット数" keyboardType={"numeric"}/>
-          <Text style={styles.unit}>セット</Text>
-        </View>
+        <Input
+          label="重さ (kg)"
+          placeholder="半角数字で入力して下さい"
+          value={kg}
+          inputStyle={{padding:10}}
+          labelStyle={{paddingTop:5,color:"black",fontSize:20,fontWeight:"100"}}
+          onChangeText={text => setKg(text)}
+        />
+         <Input
+          label="Reps (回数)"
+          placeholder="半角数字で入力して下さい"
+          value={reps}
+          inputStyle={{padding:10}}
+          labelStyle={{paddingTop:5,color:"black",fontSize:20,fontWeight:"100"}}
+          onChangeText={text => setReps(text)}
+        />
+         <Input
+          label="セット数"
+          placeholder="半角数字で入力して下さい"
+          value={setCount}
+          inputStyle={{padding:10}}
+          labelStyle={{paddingTop:5,color:"black",fontSize:20,fontWeight:"100"}}
+          onChangeText={text => setSetCount(text)}
+        />
+
         <CircleButton name={"check"} onPress={handleSubmit}/>
       </View>
     </TouchableWithoutFeedback>

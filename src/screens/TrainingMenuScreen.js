@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFDF6",
     width: "100%"
   },
-  
 });
 
 

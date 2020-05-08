@@ -40,12 +40,11 @@ const styles = StyleSheet.create({
     backgroundColor:"red"
   },
   actionText:{
-    fontSize:13,
     width:50,
     fontWeight:"bold",
     color:"#fff",
     textAlign:"center",
-    lineHeight: 50,
+    lineHeight: 40,
   }
 })
 
@@ -84,7 +83,7 @@ const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
        onPress={handleDelete}
        >
          <Text style={styles.actionText}>
-          <FontAwesome  name={"trash"} size={25}/>
+          <FontAwesome  name={"trash"} size={28}/>
          </Text> 
        </TouchableHighlight>
       );
@@ -101,10 +100,10 @@ const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
     renderRightActions={renderRightActions}
     onSwipeableOpen={()=>{getKey(data,section)}}
     >
-      <TouchableHighlight  style={styles.item} 
+      <TouchableOpacity  style={styles.item} 
       onPress={()=>navigation.navigate("TrainingMemo",{trainingMenu:data,part:section.title,date:date})}>
       <Text style={styles.title}>{data}</Text> 
-      </TouchableHighlight>
+      </TouchableOpacity>
     </Swipeable>
     );
 

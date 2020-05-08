@@ -32,9 +32,6 @@ const styles = StyleSheet.create({
     lineHeight: 50,
     textAlign: "center"
   },
-  // trainingList :{
-  //   flexDirection : "row",
-  // },
   value:{
     flexDirection:"row",
 
