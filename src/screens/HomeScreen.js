@@ -1,5 +1,5 @@
 import React ,{useState,useEffect}from 'react';
-import { StyleSheet, View, Text,TouchableOpacity,ScrollView ,Dimensions} from 'react-native';
+import { StyleSheet, View, Text,TouchableOpacity,Dimensions} from 'react-native';
 import firebase from "firebase"
 import {LineChart} from "react-native-chart-kit"
 import CircleButton from "../elements/CircleButton"
@@ -48,7 +48,13 @@ const styles = StyleSheet.create({
   arrowContainer:{
     flexDirection:"row",
     justifyContent:"space-around",
-    backgroundColor:"#FFF"
+    backgroundColor:"#FFF",
+    shadowColor: "#000",
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.3,
+    shadowRadius:2,
+    zIndex:-1,
+    elevation:1
   },
   chartArrow:{
     flexDirection:"row",
