@@ -60,7 +60,7 @@ const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
    const DATA = props.trainingMenu
    const id = props.id
    DATA.sort(sortedTraining)
-   console.log(date)
+   
 
    const handleDelete = ()=>{
     const {currentUser} = firebase.auth();

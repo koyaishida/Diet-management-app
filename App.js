@@ -10,6 +10,7 @@ import WeightManagementScreen from './src/screens/WeightManagementScreen';
 import WeightAddScreen from './src/screens/WeightAddScreen';
 import FoodManagementScreen from './src/screens/FoodManagementScreen';
 import FoodAddScreen from './src/screens/FoodAddScreen';
+import FoodDetailScreen from './src/screens/FoodDetailScreen';
 import TrainingManagementScreen from './src/screens/TrainingManagementScreen';
 import TrainingMenuScreen from './src/screens/TrainingMenuScreen';
 import TrainingMemoScreen from './src/screens/TrainingMemoScreen';
@@ -68,6 +69,8 @@ firebase.initializeApp(firebaseConfig);
           options={{ title: "食事管理" }}/>   
          <Stack.Screen name="FoodAdd" component={FoodAddScreen} 
           options={{ title: "食事の追加" }}/>   
+         <Stack.Screen name="FoodDetail" component={FoodDetailScreen} 
+          options={{ title: "食事詳細" }}/>   
          <Stack.Screen name="TrainingManagement" component={TrainingManagementScreen} 
           options={{ title: 'トレーニング管理' }}
          />   

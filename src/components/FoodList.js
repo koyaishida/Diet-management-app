@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { StyleSheet, Text, View,TouchableHighlight,FlatList } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,FlatList } from 'react-native';
 import firebase from "firebase"
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { FontAwesome } from '@expo/vector-icons';
@@ -71,12 +71,12 @@ const  FoodList =(props)=> {
    }
   const renderRightActions = ()=>{
     return (
-       <TouchableHighlight style={styles.leftAction} 
+       <TouchableOpacity style={styles.leftAction} 
        onPress={handleDelete}>
          <Text style={styles.actionText}>
           <FontAwesome  name={"trash"} size={25}/>
          </Text> 
-       </TouchableHighlight>
+       </TouchableOpacity>
     );
   };
   const getKey = (item)=>{
@@ -86,13 +86,13 @@ const  FoodList =(props)=> {
     return(
       <Swipeable renderRightActions={renderRightActions}
       onSwipeableOpen={()=>{getKey(item)}} >
-          <View style={styles.listItemContainer}>
+          <TouchableOpacity style={styles.listItemContainer} onPress={()=>{props.navigation.navigate("FoodDetail",{foodData:item})}}>
             <Text style={styles.foodTitle}>{item.foodMemo}</Text>
             <View style={styles.kcal}>
               <Text style={styles.kcalValue}>{item.kcal}</Text>
               <Text style={styles.unit}>kcal</Text>
             </View>
-          </View>
+          </TouchableOpacity>
       </Swipeable>
     )
   }

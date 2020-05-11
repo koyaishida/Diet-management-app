@@ -20,9 +20,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
   },
-  dotItem:{
-    flexDirection:"row",
-  },
   calendar:{
     borderColor: 'gray',
     height: 350,
@@ -75,23 +72,7 @@ const  WeightManagementScreen = (props)=> {
      })
      const todaysWeightData = [...todayWeightList].sort(older)
 
-     //カレンダーに渡すmarkedDateの加工
-    // const markedDays = [0]
-    // kcalList.forEach((i)=>{
-    //   if(requiredKcal - i.kcal >= 0){
-    //     markedDays.push({
-    //       date:i.date,
-    //       dot:{dots:[{color:"green"}]}
-    //     })
-    //   }else if(requiredKcal - i.kcal < 0){
-    //     markedDays.push({
-    //       date:i.date,
-    //       dot:{dots:[{color:"red"}]}
-    //     })
-    //   }
-    // })
-    // const dotDays = Object.assign(...markedDays.map(item => ({ [item.date]: item.dot })))
-    // const markedDates = {...dotDays,[currentDay]:{selected:true,selectedColor:"#ffa500"}}
+     
 
     
 
@@ -101,21 +82,10 @@ const  WeightManagementScreen = (props)=> {
           <Calendar 
           onDayPress = {((day)=>{setCurrentDay(day.dateString),setTimestamp(new Date(day.timestamp))})}
           style={styles.calendar}
-          // markedDates = {
-          //   markedDates
-          // }
-          markingType={'multi-dot'}
+           markedDates = {{
+            [currentDay]:{selected:true,selectedColor:"#ffa500"}
+           }}
           />
-          <View style={styles.dotsDescription}>
-            <View style={styles.dotItem}>
-              <Text style={{color:"green",fontWeight:"bold"}}>・</Text>
-              <Text>適正カロリー</Text>
-            </View>
-            <View style={styles.dotItem}>
-              <Text style={{color:"red",fontWeight:"bold"}}>・</Text>
-              <Text>カロリーオーバー</Text>
-            </View>
-          </View>
           <Text style={styles.date}>{currentDay}の体重記録</Text>
           <WeightList 
             weightData={todaysWeightData}

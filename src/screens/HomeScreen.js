@@ -80,7 +80,7 @@ const chartConfig = {
 
 
 const decimalPoint  = (y)=>{
-return parseFloat(y).toFixed(1)
+  return parseFloat(y).toFixed(1)
 }
 
 const toInteger = (y)=>{

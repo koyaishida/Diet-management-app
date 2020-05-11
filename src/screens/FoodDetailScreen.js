@@ -40,18 +40,20 @@ const styles = StyleSheet.create({
 
 
 
-const FoodAddScreen = (props) => {
-  const [kcal,setKcal] =useState()
-  const [foodMemo,setFoodMemo] =useState()
-  const {date} = props.route.params
+const FoodDetailScreen = (props) => {
+  
+  const item = props.route.params.foodData
+  const [kcal,setKcal] =useState(item.kcal)
+  const [foodMemo,setFoodMemo] =useState(item.foodMemo)
+
   const handleSubmit = () => {
-    const db = firebase.firestore();
+    const db =firebase.firestore()
     const {currentUser} = firebase.auth();
-     db.collection(`users/${currentUser.uid}/food`).add({
-       kcal: kcal,
-       foodMemo: foodMemo,
-       date: date ? date: new Date()
-     })
+    
+    db.collection(`users/${currentUser.uid}/food`).doc(item.key).update({
+      kcal:kcal,
+      foodMemo:foodMemo
+    })
     .then(()=> {
       props.navigation.navigate("FoodManagement")
     })
@@ -85,4 +87,4 @@ const FoodAddScreen = (props) => {
   );
 }
 
-export default FoodAddScreen
+export default FoodDetailScreen
