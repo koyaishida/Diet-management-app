@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
 
 
 const WeightAddScreen = (props) => {
-  const [weight,setWeight] =useState("")
-  const [bodyFatPercentage,setBodyFatPercentage] =useState("")
+  const [weight,setWeight] =useState()
+  const [bodyFatPercentage,setBodyFatPercentage] =useState()
   
   const disabled =()=>{
     if(isNaN(parseFloat(weight)) || weight === undefined){

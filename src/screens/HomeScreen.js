@@ -93,45 +93,45 @@ const dateToString = (date)=>{
 }
 
 const older = ((a,b)=>(a.date.seconds - b.date.seconds))
+const currentDay = new Date().toISOString().split("T")[0]
 
 
 const HomeScreen = (props)=> {
-  const [weightData,setWeightData] = useState([])
+  const [weightData,setWeightData] = useState([0])
   const [weightLabels,setWeightLabels] = useState([])
   const [weightList,setWeightList] = useState([0])
   const [foodData,setFoodData] = useState([])
   const [kcalList,setKcalList] = useState([0])
-  const [currentKcal,setCurrentKcal] = useState([])
+  // const [currentKcal,setCurrentKcal] = useState([])
   const [kcalLabels,setKcalLabels] = useState([])
-  const [currentDay,setCurrentDay] = useState(new Date().toISOString().split("T")[0],)
   const [requiredKcal,setRequiredKcal] = useState([])
   const [targetWeight,setTargetWeight] = useState([])
-  const [amountDisplay,setAmountDisplay] = useState(7)
+  const [chartVisible,setChartVisible] = useState(7)
   
 
   const displayChart =(data)=>{
-    if(data.length > amountDisplay){
-      return data.slice(data.length-amountDisplay,data.length-amountDisplay+7)
+    if(data.length > chartVisible){
+      return data.slice(data.length-chartVisible,data.length-chartVisible+7)
     }else if(data.length <= 7){
        return data 
-    }else if(data.length <= amountDisplay){
+    }else if(data.length <= chartVisible){
       return data.slice(data.length-data.length,data.length-data.length+7)
     }
   }
 
   const prevChart =()=>{
-    if(weightLabels.length < amountDisplay || kcalLabels.length < amountDisplay){
+    if(weightLabels.length < chartVisible || kcalLabels.length < chartVisible){
       return
     }else{
-      setAmountDisplay(amountDisplay+7)
+      setChartVisible(chartVisible+7)
     }
   }
 
   const nextChart =()=>{
-    if(amountDisplay == 7){
+    if(chartVisible == 7){
       return
     }else{
-      setAmountDisplay(amountDisplay-7)
+      setChartVisible(chartVisible-7)
     }
   }
   
@@ -154,7 +154,9 @@ const HomeScreen = (props)=> {
 
       //体重の値の取得
       const weightList =[]
+      //修正が必要かも
       const sortedWeightData = [...weightData].sort(older)
+      setWeightData(sortedWeightData)
 
       sortedWeightData.forEach((item)=>{
         weightList.push(parseFloat(item.weight))
@@ -187,6 +189,8 @@ const HomeScreen = (props)=> {
       //kcalの加工
       const kcalList =[]
       const sortedKcalData = [...foodData].sort(older)
+      setFoodData(sortedKcalData)
+      console.log(foodData,"fd")
 
       for(let i = 0; i < sortedKcalData.length ; i++){
         if(i === 0){
@@ -222,14 +226,14 @@ const HomeScreen = (props)=> {
       }
       setKcalLabels(displayChart(kcalLabels))
 
-      if(kcalLabels[kcalLabels.length-1] !== currentDay.slice(5)){
-        setCurrentKcal(0)
-      }else{
-        setCurrentKcal(kcalList[kcalList.length-1])
-      }
+      //  if(kcalLabels[kcalLabels.length-1] !== currentDay.slice(5)){
+      //     setCurrentKcal(0)
+      //   }else{
+      //    setCurrentKcal(kcalList[kcalList.length-1])
+      //   }
+
     })
 
-  
     db.collection(`users/${currentUser.uid}/personalData`)
     .onSnapshot((querySnapshot)=>{
       const personalData = []
@@ -239,16 +243,17 @@ const HomeScreen = (props)=> {
       setRequiredKcal(personalData[0].requiredKcal)
       setTargetWeight(personalData[0].targetWeight)
     })
+    console.log(foodData[foodData.length-1].kcal,"cr")
     return () => {console.log('Clean Up ')};
-  },[amountDisplay])
+  },[chartVisible])
+  console.log("render")
   
-        
   
   return (
     <View style={styles.container}>
       <View style={{backgroundColor:"#fff"}}>
       <Text style={styles.chartTitle}>目標体重まであと
-        <Text style={styles.chartTitleValue}> {`${Math.round((weightList[weightList.length-1]-targetWeight)*10)/10}`}</Text> 
+      <Text style={styles.chartTitleValue}> {`${Math.round((weightData[weightData.length-1].weight-targetWeight)*10)/10}`}</Text>
         kg
       </Text>
       </View>
@@ -267,7 +272,8 @@ const HomeScreen = (props)=> {
       />
       <View style={{backgroundColor:"#fff"}}>
       <Text style={styles.chartTitle}>必要摂取カロリーまであと
-        <Text style={styles.chartTitleValue}> {`${requiredKcal-currentKcal}`}</Text>
+        {/* <Text style={styles.chartTitleValue}> {`${requiredKcal-currentKcal}`}</Text> */}
+        {/* <Text style={styles.chartTitleValue}> {`${requiredKcal-foodData[foodData.length-1].kcal}`}</Text> */}
         kcal
       </Text>
       </View>
