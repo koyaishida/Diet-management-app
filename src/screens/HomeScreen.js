@@ -97,15 +97,14 @@ const currentDay = new Date().toISOString().split("T")[0]
 
 
 const HomeScreen = (props)=> {
-  const [weightData,setWeightData] = useState([0])
   const [weightLabels,setWeightLabels] = useState([])
   const [weightList,setWeightList] = useState([0])
-  const [foodData,setFoodData] = useState([])
   const [kcalList,setKcalList] = useState([0])
-  // const [currentKcal,setCurrentKcal] = useState([])
+  const [currentKcal,setCurrentKcal] = useState([])
+  const [currentWeight,setCurrentWeight] = useState([])
   const [kcalLabels,setKcalLabels] = useState([])
-  const [requiredKcal,setRequiredKcal] = useState([])
-  const [targetWeight,setTargetWeight] = useState([])
+  const [requiredKcal,setRequiredKcal] = useState(0)
+  const [targetWeight,setTargetWeight] = useState(0)
   const [chartVisible,setChartVisible] = useState(7)
   
 
@@ -150,32 +149,31 @@ const HomeScreen = (props)=> {
       querySnapshot.forEach((doc)=>{
         weightData.push({...doc.data(),key: doc.id})
       })
-      setWeightData(weightData)
-
-      //体重の値の取得
-      const weightList =[]
-      //修正が必要かも
       const sortedWeightData = [...weightData].sort(older)
-      setWeightData(sortedWeightData)
+      //体重の値の取得
+       const weightList =[]
 
       sortedWeightData.forEach((item)=>{
         weightList.push(parseFloat(item.weight))
       })
-      //折れ線グラフエラー回避の為
-      if(weightList.length == 0){
-        setWeightList([0])
-      }else{
-        setWeightList(displayChart(weightList))
-      }
 
+      
       //体重のラベルの取得
-      const weightLabels = [];
+       const weightLabels = [];
       
       sortedWeightData.forEach((a)=>{
         weightLabels.push(dateToString(a.date).slice(5))
       })
-      setWeightLabels(displayChart(weightLabels))
+      setWeightLabels(weightLabels)
+      
+
+      if(weightData.length == 0){
+        setCurrentWeight(0)
+      }else{
+        setCurrentWeight(weightList[weightList.length-1])
+        }
     })
+
 
     //firebaseから食事データを取得
     db.collection(`users/${currentUser.uid}/food`)
@@ -183,15 +181,12 @@ const HomeScreen = (props)=> {
       const foodData =[];
       querySnapshot.forEach((doc)=>{
         foodData.push({...doc.data(),key: doc.id})
-        })
-      setFoodData(foodData)
-    
-      //kcalの加工
-      const kcalList =[]
+      })
       const sortedKcalData = [...foodData].sort(older)
-      setFoodData(sortedKcalData)
-      console.log(foodData,"fd")
-
+      
+      
+      //kcalの加工
+       const kcalList =[]
       for(let i = 0; i < sortedKcalData.length ; i++){
         if(i === 0){
           kcalList.push(parseFloat(sortedKcalData[i].kcal))
@@ -203,15 +198,8 @@ const HomeScreen = (props)=> {
             }
         }
       }
-
-      if(kcalList.length == 0){
-        setKcalList([0])
-      }else{
-        setKcalList(displayChart(kcalList))
-      }  
+      setKcalList(kcalList)
       
-
-
       //kcalLabelの加工
       const kcalLabels = [];
       for (let i = 0; i < sortedKcalData.length; i++){
@@ -224,15 +212,15 @@ const HomeScreen = (props)=> {
             }
         }
       }
-      setKcalLabels(displayChart(kcalLabels))
+      setKcalLabels(kcalLabels)
 
-      //  if(kcalLabels[kcalLabels.length-1] !== currentDay.slice(5)){
-      //     setCurrentKcal(0)
-      //   }else{
-      //    setCurrentKcal(kcalList[kcalList.length-1])
-      //   }
-
+      if(kcalLabels[kcalLabels.length-1] !== currentDay.slice(5)){
+        setCurrentKcal(0)
+       }else{
+          setCurrentKcal(kcalList[kcalList.length-1])
+         }
     })
+    
 
     db.collection(`users/${currentUser.uid}/personalData`)
     .onSnapshot((querySnapshot)=>{
@@ -243,24 +231,25 @@ const HomeScreen = (props)=> {
       setRequiredKcal(personalData[0].requiredKcal)
       setTargetWeight(personalData[0].targetWeight)
     })
-    console.log(foodData[foodData.length-1].kcal,"cr")
+    
     return () => {console.log('Clean Up ')};
   },[chartVisible])
-  console.log("render")
+
   
+
   
   return (
     <View style={styles.container}>
       <View style={{backgroundColor:"#fff"}}>
       <Text style={styles.chartTitle}>目標体重まであと
-      <Text style={styles.chartTitleValue}> {`${Math.round((weightData[weightData.length-1].weight-targetWeight)*10)/10}`}</Text>
+      <Text style={styles.chartTitleValue}>{Math.round((currentWeight-targetWeight)*10)/10}</Text>
         kg
       </Text>
       </View>
       <LineChart 
         data = {{
-          labels: weightLabels,
-          datasets: [{data:weightList}]
+          labels: weightList.length==0 ? [0]:displayChart(weightLabels),
+          datasets: [{data:weightList.length==0 ? [0]:displayChart(weightList)}]
         }}
         formatYLabel={decimalPoint}
         yAxisSuffix=" kg"
@@ -272,16 +261,15 @@ const HomeScreen = (props)=> {
       />
       <View style={{backgroundColor:"#fff"}}>
       <Text style={styles.chartTitle}>必要摂取カロリーまであと
-        {/* <Text style={styles.chartTitleValue}> {`${requiredKcal-currentKcal}`}</Text> */}
-        {/* <Text style={styles.chartTitleValue}> {`${requiredKcal-foodData[foodData.length-1].kcal}`}</Text> */}
+         <Text style={styles.chartTitleValue}> {`${requiredKcal-currentKcal}`}</Text> 
         kcal
       </Text>
       </View>
       
-      <LineChart 
+       <LineChart 
         data = {{
-          labels: kcalLabels,
-          datasets: [{data:kcalList}]
+          labels: kcalList.length == 0 ? [0]: displayChart(kcalLabels),
+          datasets: [{data:kcalList.length == 0 ? [0]: displayChart(kcalList)}]
         }}
         formatYLabel={toInteger}
         yAxisSuffix="kcal"

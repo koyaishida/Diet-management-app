@@ -132,7 +132,7 @@ const  PersonalDataScreen =(props)=>{
      const handleSubmit = () => {
         const db = firebase.firestore();
         const {currentUser} = firebase.auth();
-          db.collection(`users/${currentUser.uid}`).doc("PersonalData").set({
+          db.collection(`users/${currentUser.uid}/personalData`).doc("PersonalData").set({
             requiredKcal:requiredKcal,
             targetWeight:targetWeight,
           })
