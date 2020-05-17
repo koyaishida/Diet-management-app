@@ -28,8 +28,9 @@ const TrainingMenuScreen = (props)=> {
      .onSnapshot((querySnapshot)=>{
         querySnapshot.forEach((doc)=>{
           const menu = doc.data()
-          const trainingMenu = Object.entries(menu).map(([title,data])=>(
-            {title,data}
+          //sectionListでItemに渡すデータのkeyはdataでなくてはならない
+          const trainingMenu = Object.entries(menu).map(([part,data])=>(
+            {part,data}
           ))
           setTrainingMenu(trainingMenu)
           setId(doc.id)

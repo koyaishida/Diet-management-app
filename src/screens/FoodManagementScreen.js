@@ -57,18 +57,19 @@ const  FoodManagementScreen = (props)=> {
         foodData.push({...doc.data(),key: doc.id})
       })
       setFoodData(foodData)
-      const sortedKcalData = [...foodData].sort(older)
-      for(let i = 0; i < sortedKcalData.length ; i++){
+      const sortedFoodData = foodData.sort(older)
+
+      for(let i = 0; i < sortedFoodData.length ; i++){
         if(i === 0){
           kcalList.push(
-          {kcal:parseFloat(sortedKcalData[0].kcal),
-            date:dateToString(sortedKcalData[0].date)})
-        }else{
-          if(dateToString(sortedKcalData[i].date) === dateToString(sortedKcalData[i -1].date)){
-            kcalList[kcalList.length-1].kcal += parseFloat(sortedKcalData[i].kcal)
-          }else{
-            kcalList.push({kcal:parseFloat(sortedKcalData[i].kcal),date:dateToString(sortedKcalData[i].date)})
-            }
+          {kcal:parseFloat(sortedFoodData[0].kcal),
+            date:dateToString(sortedFoodData[0].date)})
+         }else{
+           if(dateToString(sortedFoodData[i].date) === dateToString(sortedFoodData[i -1].date)){
+              kcalList[kcalList.length-1].kcal += parseFloat(sortedFoodData[i].kcal)
+            }else{
+              kcalList.push({kcal:parseFloat(sortedFoodData[i].kcal),date:dateToString(sortedFoodData[i].date)})
+              }
         }
       }
 
@@ -92,14 +93,13 @@ const  FoodManagementScreen = (props)=> {
    },[])
 
    //日毎のデータの加工
-    const todayFoodList = foodData.filter((item,index,)=>{
+    const currentFoodList = foodData.sort(older).filter((item,index,)=>{
       if (dateToString(item.date) === currentDay){
         return true
           }
     })
-    const todaysFoodData = [...todayFoodList].sort(older)
 
-    //カレンダーに渡すmarkedDateの加工
+    //Calenderに渡すmarkedDatesの加工
     const markedDays = [0]
     kcalList.forEach((i)=>{
       if(requiredKcal - i.kcal >= 0){
@@ -142,7 +142,7 @@ const  FoodManagementScreen = (props)=> {
           </View>
         
           <FoodList 
-            foodData={todaysFoodData}
+            currentFoodList={currentFoodList}
             navigation={props.navigation}/>
         <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("FoodAdd",{date:timestamp})}/>
       </View>

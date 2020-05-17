@@ -98,7 +98,7 @@ const  FoodList =(props)=> {
   }
   return (
     <View style={styles.foodListContainer}>
-      <FlatList data={props.foodData} renderItem={renderFood.bind(this)}/>
+      <FlatList data={props.currentFoodList} renderItem={renderFood.bind(this)}/>
     </View>
   )  
 }

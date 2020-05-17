@@ -15,35 +15,14 @@ const styles = StyleSheet.create({
     backgroundColor:"#FFFDF6",
     width: "100%",
   },
-  upperContainer :{
-    flexDirection: "row",
-     padding:10,
-    paddingRight:30,
-  },
-  upperLeft:{
-    width:"50%",
-  },
-  upperContainerTitle : {
-    fontSize: 18,
-    alignSelf: "flex-end"
-  },
-  upperContainerText : {
-    fontSize: 22,
-    alignSelf: "flex-end"
-  },
-  button: {
-    backgroundColor: "green",
-    height: screenHeight/20,
-    borderRadius: 14,
-    justifyContent: "center",
-    alignItems:"center",
-    width: "75%",
+  chartTitle:{
+    fontSize:18,
+    width:"90%",
     alignSelf: "center",
-    marginTop: 10,
+    padding:5,
   },
-  buttonTitle: {
-    fontSize:20,
-    color: "#fff",
+  chartTitleValue:{
+    fontSize:22,
   },
   arrowContainer:{
     flexDirection:"row",
@@ -60,15 +39,20 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     margin:5,
   },
-  chartTitle:{
-    fontSize:18,
-    width:"90%",
+  button: {
+    backgroundColor: "green",
+    height: screenHeight/20,
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems:"center",
+    width: "75%",
     alignSelf: "center",
-    padding:5,
+    marginTop: 10,
   },
-  chartTitleValue:{
-    fontSize:22,
-  }
+  buttonTitle: {
+    fontSize:20,
+    color: "#fff",
+  },
 });
 
 const chartConfig = {
@@ -149,14 +133,14 @@ const HomeScreen = (props)=> {
       querySnapshot.forEach((doc)=>{
         weightData.push({...doc.data(),key: doc.id})
       })
-      const sortedWeightData = [...weightData].sort(older)
+      const sortedWeightData = weightData.sort(older)
       //体重の値の取得
        const weightList =[]
 
       sortedWeightData.forEach((item)=>{
         weightList.push(parseFloat(item.weight))
       })
-
+      setWeightList(weightList)
       
       //体重のラベルの取得
        const weightLabels = [];
@@ -182,7 +166,7 @@ const HomeScreen = (props)=> {
       querySnapshot.forEach((doc)=>{
         foodData.push({...doc.data(),key: doc.id})
       })
-      const sortedKcalData = [...foodData].sort(older)
+      const sortedKcalData = foodData.sort(older)
       
       
       //kcalの加工
@@ -236,15 +220,13 @@ const HomeScreen = (props)=> {
   },[chartVisible])
 
   
-
-  
   return (
     <View style={styles.container}>
       <View style={{backgroundColor:"#fff"}}>
-      <Text style={styles.chartTitle}>目標体重まであと
-      <Text style={styles.chartTitleValue}>{Math.round((currentWeight-targetWeight)*10)/10}</Text>
-        kg
-      </Text>
+        <Text style={styles.chartTitle}>目標体重まであと
+          <Text style={styles.chartTitleValue}>{Math.round((currentWeight-targetWeight)*10)/10}</Text>
+          kg
+        </Text>
       </View>
       <LineChart 
         data = {{
@@ -260,10 +242,10 @@ const HomeScreen = (props)=> {
         withOuterLines={false}
       />
       <View style={{backgroundColor:"#fff"}}>
-      <Text style={styles.chartTitle}>必要摂取カロリーまであと
-         <Text style={styles.chartTitleValue}> {`${requiredKcal-currentKcal}`}</Text> 
-        kcal
-      </Text>
+        <Text style={styles.chartTitle}>必要摂取カロリーまであと
+          <Text style={styles.chartTitleValue}> {`${requiredKcal-currentKcal}`}</Text> 
+          kcal
+        </Text>
       </View>
       
        <LineChart 

@@ -65,16 +65,11 @@ const  WeightManagementScreen = (props)=> {
   },[currentDay])
 
    //日毎のデータの加工
-     const todayWeightList = weightDataList.filter((item,index,)=>{
+     const currentWeightList = weightDataList.sort(older).filter((item,index,)=>{
        if (dateToString(item.date) === currentDay){
          return true
            }
      })
-     const todaysWeightData = [...todayWeightList].sort(older)
-
-     
-
-    
 
 
     return (
@@ -88,7 +83,7 @@ const  WeightManagementScreen = (props)=> {
           />
           <Text style={styles.date}>{currentDay}の体重記録</Text>
           <WeightList 
-            weightData={todaysWeightData}
+            weightData={currentWeightList}
             navigation={props.navigation}/>
           <CircleButton name={"plus"} onPress={()=>props.navigation.navigate("WeightAdd",{date:timestamp})}/>
       </View>

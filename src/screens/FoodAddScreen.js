@@ -44,6 +44,7 @@ const FoodAddScreen = (props) => {
   const [kcal,setKcal] =useState()
   const [foodMemo,setFoodMemo] =useState()
   const {date} = props.route.params
+
   const handleSubmit = () => {
     const db = firebase.firestore();
     const {currentUser} = firebase.auth();
@@ -58,7 +59,8 @@ const FoodAddScreen = (props) => {
     .catch((error)=>{
       console.error("Error adding document: ", error);
     });
-  } 
+  }
+
   const disabled =()=>{
     if(isNaN(parseFloat(kcal)) || kcal === undefined){
       return true
@@ -75,7 +77,6 @@ const FoodAddScreen = (props) => {
           onChangeText={text => setKcal(text)} placeholder="総カロリー" keyboardType={"numeric"}/>
           <Text style={styles.unit}>kcal</Text>
         </View>
-        
 
         <TextInput multiline style={styles.foodMemo} value={foodMemo}
         onChangeText={text => setFoodMemo(text)} keyboardType={"default"} placeholder="食事内容"/>

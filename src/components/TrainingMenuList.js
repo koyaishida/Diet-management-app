@@ -50,17 +50,16 @@ const styles = StyleSheet.create({
 
 
 const array = ["胸","背中","肩","腕","脚","その他"]
-const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
+const sortedTrainingMenu = ((a,b)=>array.indexOf(a.part)-array.indexOf(b.part))
  
  const  TrainingMenuList =(props)=> {
    const [deleteMenu,setDeleteMenu]=useState()
    const [deleteArrayName,setDeleteArrayName]=useState()
+   
    const {navigation} = props.navigation
    const {date} = props.navigation.route.params
-   const DATA = props.trainingMenu
+   const DATA = props.trainingMenu.sort(sortedTrainingMenu)
    const id = props.id
-   DATA.sort(sortedTraining)
-   
 
    const handleDelete = ()=>{
     const {currentUser} = firebase.auth();
@@ -90,22 +89,21 @@ const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
     };
   const getKey = (data,section)=>{
     setDeleteMenu(data)
-    setDeleteArrayName(section.title)
+    setDeleteArrayName(section.part)
   }
-   
-   
 
-   const Item = ( {data, section} ) => (
+
+  const Item = ( {data, section} ) => (
     <Swipeable 
     renderRightActions={renderRightActions}
-    onSwipeableOpen={()=>{getKey(data,section)}}
-    >
+    onSwipeableOpen={()=>{getKey(data,section)}} >
+
       <TouchableOpacity  style={styles.item} 
-      onPress={()=>navigation.navigate("TrainingMemo",{trainingMenu:data,part:section.title,date:date})}>
-      <Text style={styles.title}>{data}</Text> 
+      onPress={()=>navigation.navigate("TrainingMemo",{trainingMenu:data,part:section.part,date:date})}>
+        <Text style={styles.title}>{data}</Text> 
       </TouchableOpacity>
     </Swipeable>
-    );
+  );
 
    return(
     <SafeAreaView style={styles.container}>
@@ -114,11 +112,11 @@ const sortedTraining = ((a,b)=>array.indexOf(a.title)-array.indexOf(b.title))
         keyExtractor={(item, index) => item + index}
         renderItem={({ item,section }) => <Item data={item} section={section} />}
 
-        renderSectionHeader={({ section: { title } }) => (
+        renderSectionHeader={({ section: {part} }) => (
           <View style={styles.labelContainer}>
-            <Text style={styles.label}>{title}</Text>
-            <TouchableOpacity onPress={()=>navigation.navigate("TrainingAdd",{trainingMenu: title,id:props.id})}>
-            <Text style={styles.addMenu}>+</Text>
+            <Text style={styles.label}>{part}</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate("TrainingAdd",{part:part,id:id})}>
+              <Text style={styles.addMenu}>+</Text>
             </TouchableOpacity>
           </View>
         )}

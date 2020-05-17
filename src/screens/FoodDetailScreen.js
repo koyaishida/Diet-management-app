@@ -42,15 +42,15 @@ const styles = StyleSheet.create({
 
 const FoodDetailScreen = (props) => {
   
-  const item = props.route.params.foodData
-  const [kcal,setKcal] =useState(item.kcal)
-  const [foodMemo,setFoodMemo] =useState(item.foodMemo)
+  const foodData = props.route.params.foodData
+  const [kcal,setKcal] =useState(foodData.kcal)
+  const [foodMemo,setFoodMemo] =useState(foodData.foodMemo)
 
   const handleSubmit = () => {
     const db =firebase.firestore()
     const {currentUser} = firebase.auth();
     
-    db.collection(`users/${currentUser.uid}/food`).doc(item.key).update({
+    db.collection(`users/${currentUser.uid}/food`).doc(foodData.key).update({
       kcal:kcal,
       foodMemo:foodMemo
     })

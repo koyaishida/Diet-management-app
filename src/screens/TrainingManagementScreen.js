@@ -13,13 +13,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFDF6",
     width: "100%"
   },
-  trainingDay:{
-    textAlign:"center",
-    fontSize:20,
-    fontWeight:"bold",
-    backgroundColor:"green",
-    color:"#fff",
-  },
+   calendar:{
+     height: 350,
+     width:"100%",
+   },
   dotsDescription:{
     flexDirection:"row",
     justifyContent:"space-around",
@@ -30,16 +27,20 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     fontSize:20,
   },
-  calendar:{
-    borderColor: 'gray',
-    height: 350,
-    width:"100%",
-  }
+  trainingDay:{
+    textAlign:"center",
+    fontSize:20,
+    fontWeight:"bold",
+    backgroundColor:"green",
+    color:"#fff",
+  },
 });
+
 const  dateToString = (date)=>{
   const str = date.toDate().toISOString();
   return str.split("T")[0]
 }
+
 const older = ((a,b)=>(a.date.seconds - b.date.seconds))
 
 const  TrainingManagementScreen = (props)=> {
@@ -63,30 +64,19 @@ const  TrainingManagementScreen = (props)=> {
     return () => {console.log('Clean Up ')};
   },[])
 
-  const todayTrainingList = trainingList.filter((item,index,)=>{
+  const currentTrainingList = [...trainingList].sort(older).filter((item,index,)=>{
     if (dateToString(item.date) === currentDay){
       return true
     }
   })
   
-  const sortedTrainingList = [...todayTrainingList].sort(older)
-  const dotTrainingList = [...trainingList].sort(older)
 
-
-  const dotList = dotTrainingList.map((item)=>{
+  const dotList = [...trainingList].sort(older).map((item)=>{
     return {date:dateToString(item.date),part:item.part}
   })
   
-
   const markedList = [0]
-  const breast = "red"
-  const back = "green"
-  const shoulder = "blue"
-  const arm = "yellow"
-  const leg = "purple"
-  const other = "black"
   
-
   for(let i = 0 ; i < dotList.length; i++){
     const addMarkedList = (dotColor)=>{
       markedList.push({
@@ -99,41 +89,41 @@ const  TrainingManagementScreen = (props)=> {
     }
     if(i == 0 || dotList[i].date !== dotList[i-1].date){
       if(dotList[i].part == "胸"){
-        addMarkedList(breast)
+        addMarkedList("red")
       }
       else if(dotList[i].part =="背中"){
-        addMarkedList(back)
+        addMarkedList("green")
       }
       else if(dotList[i].part=="肩"){
-        addMarkedList(shoulder)
+        addMarkedList("blue")
       }
       else if(dotList[i].part=="腕"){
-        addMarkedList(arm)
+        addMarkedList("yellow")
       }
       else if(dotList[i].part=="脚"){
-        addMarkedList(leg)
+        addMarkedList("purple")
       }else if(dotList[i].part=="その他"){
-        addMarkedList(other)
+        addMarkedList("black")
       }
     }else if(i > 0){
        if(dotList[i].date == dotList[i-1].date && dotList[i].part !== dotList[i-1].part){
            if(dotList[i].part == "胸"){
-             addDots(breast)
+             addDots("red")
            }
             else if(dotList[i].part =="背中"){
-              addDots(back)
+              addDots("green")
             }
             else if(dotList[i].part=="肩"){
-              addDots(shoulder)
+              addDots("blue")
            }
             else if(dotList[i].part=="腕"){
-              addDots(arm)
+              addDots("yellow")
            }
             else if(dotList[i].part=="脚"){
-              addDots(leg)
+              addDots("purple")
            }
             else if(dotList[i].part=="その他"){
-              addDots(other)
+              addDots("black")
            }    
       }else if(dotList[i].date == dotList[i-1].date && dotList[i].part == dotList[i-1].part){
         
@@ -184,9 +174,9 @@ const  TrainingManagementScreen = (props)=> {
         </View>
         <Text style={styles.trainingDay}>{currentDay}のトレーニング記録</Text>
         <TrainingList 
-          trainingList={sortedTrainingList}
+          trainingList={currentTrainingList}
           navigation={props.navigation}
-          />
+        /> 
         <CircleButton name={"plus"} 
         onPress={()=>props.navigation.navigate("TrainingMenu",{date:timestamp})}
         /> 

@@ -29,9 +29,8 @@ const styles = StyleSheet.create({
 
 const TrainingAddScreen = (props) => {
   const [addMenu, setAddMenu] = useState("")
-  const part = props.route.params.trainingMenu
-  const id = props.route.params.id
-  
+  const {part,id} = props.route.params
+
   const handleSubmit = () => {
      const db = firebase.firestore();
      const {currentUser} = firebase.auth();

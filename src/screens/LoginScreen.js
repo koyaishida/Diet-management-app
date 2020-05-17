@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
 
 const LoginScreen = (props) => {
 
-  const [email,setEmail] =useState("test1@gmail.com")
-  const [password,setPassword] =useState("password")
-  // const [email,setEmail] =useState("k.157.2aic@gmail.com")
-  // const [password,setPassword] =useState("k-a.157.2")
+  //  const [email,setEmail] =useState("test1@gmail.com")
+  //  const [password,setPassword] =useState("password")
+   const [email,setEmail] =useState("k.157.2aic@gmail.com")
+   const [password,setPassword] =useState("k-a.157.2")
 
   const handleLogin = () =>{
     firebase.auth().signInWithEmailAndPassword(email, password)
