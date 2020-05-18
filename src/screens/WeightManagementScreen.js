@@ -70,16 +70,28 @@ const  WeightManagementScreen = (props)=> {
          return true
            }
      })
+     
+     const markedDays = [0]
+     weightDataList.forEach((i)=>{
+       markedDays.push({
+         date:dateToString(i.date),
+         dot:{dots:[{color:"black"}]}
+       })
+     })
 
+     const dotDays = Object.assign(...markedDays.map(item => ({ [item.date]: item.dot })))
+     
+     const markedDates = {...dotDays,[currentDay]:{selected:true,selectedColor:"#ffa500"}}
+
+     
 
     return (
       <View style={styles.container}>
           <Calendar 
           onDayPress = {((day)=>{setCurrentDay(day.dateString),setTimestamp(new Date(day.timestamp))})}
           style={styles.calendar}
-           markedDates = {{
-            [currentDay]:{selected:true,selectedColor:"#ffa500"}
-           }}
+           markedDates = {markedDates}
+           markingType={'multi-dot'}
           />
           <Text style={styles.date}>{currentDay}の体重記録</Text>
           <WeightList 

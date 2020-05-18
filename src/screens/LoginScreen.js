@@ -136,6 +136,7 @@ const LoginScreen = (props) => {
     });
   }
   
+  
   const switchToSignup = ()=>[
     props.navigation.navigate("Signup")
   ]
