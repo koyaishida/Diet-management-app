@@ -100,6 +100,9 @@ const  TrainingManagementScreen = (props)=> {
       else if(dotList[i].part=="腕"){
         addMarkedList("yellow")
       }
+      else if(dotList[i].part=="腹"){
+        addMarkedList("gray")
+      }
       else if(dotList[i].part=="脚"){
         addMarkedList("purple")
       }else if(dotList[i].part=="その他"){
@@ -118,6 +121,9 @@ const  TrainingManagementScreen = (props)=> {
            }
             else if(dotList[i].part=="腕"){
               addDots("yellow")
+           }
+            else if(dotList[i].part=="腹"){
+              addDots("gray")
            }
             else if(dotList[i].part=="脚"){
               addDots("purple")
@@ -162,6 +168,10 @@ const  TrainingManagementScreen = (props)=> {
           <View style={styles.dotsDescription}>
             <Text style={{color:"yellow",fontWeight:"bold"}}>・</Text>
             <Text>腕</Text>
+          </View>
+          <View style={styles.dotsDescription}>
+            <Text style={{color:"gray",fontWeight:"bold"}}>・</Text>
+            <Text>腹</Text>
           </View>
           <View style={styles.dotsDescription}>
             <Text style={{color:"purple",fontWeight:"bold"}}>・</Text>

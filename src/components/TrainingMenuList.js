@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 })
 
 
-const array = ["胸","背中","肩","腕","脚","その他"]
+const array = ["胸","背中","肩","腕","腹","脚","その他"]
 const sortedTrainingMenu = ((a,b)=>array.indexOf(a.part)-array.indexOf(b.part))
  
  const  TrainingMenuList =(props)=> {

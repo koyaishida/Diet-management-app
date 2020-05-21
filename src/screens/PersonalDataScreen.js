@@ -135,6 +135,7 @@ const  PersonalDataScreen =(props)=>{
           db.collection(`users/${currentUser.uid}/personalData`).doc("PersonalData").set({
             requiredKcal:requiredKcal,
             targetWeight:targetWeight,
+            weight:weight,
           })
          .then(()=> {
            props.navigation.navigate("Home")

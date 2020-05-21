@@ -214,6 +214,9 @@ const HomeScreen = (props)=> {
       })
       setRequiredKcal(personalData[0].requiredKcal)
       setTargetWeight(personalData[0].targetWeight)
+      if(currentWeight === 0){
+        setCurrentWeight(personalData[0].weight)
+      }
     })
     
     return () => {console.log('Clean Up ')};
@@ -283,18 +286,18 @@ const HomeScreen = (props)=> {
       <View style={{marginTop:20}}>
         <TouchableOpacity style={styles.button} activeOpacity={0.5}
           onPress={()=>props.navigation.navigate("TrainingManagement")}>
-          <Text style={styles.buttonTitle}>トレーニング管理
+          <Text style={styles.buttonTitle}>トレーニング記録
           </Text>
         </TouchableOpacity> 
 
         <TouchableOpacity style={styles.button} activeOpacity={0.5}
           onPress={()=>props.navigation.navigate("FoodManagement")}>
-          <Text style={styles.buttonTitle}>食事管理</Text>
+          <Text style={styles.buttonTitle}>食事の記録</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} activeOpacity={0.5}
           onPress={()=>props.navigation.navigate("WeightManagement")}>
-        <Text style={styles.buttonTitle} >体重管理</Text>
+        <Text style={styles.buttonTitle} >体重の記録</Text>
         </TouchableOpacity>
       </View>
       <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")} display={false}/>

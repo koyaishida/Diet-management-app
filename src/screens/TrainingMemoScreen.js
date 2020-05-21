@@ -1,5 +1,5 @@
 import React ,{useState}from 'react';
-import { StyleSheet, View, TextInput,Text,TouchableWithoutFeedback,Keyboard } from 'react-native';
+import { StyleSheet, View,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import CircleButton from "../elements/CircleButton"
 import { Input,} from 'react-native-elements'
 import firebase from "firebase"
@@ -52,6 +52,7 @@ const TrainingMemoScreen = (props) => {
           inputStyle={{padding:10}}
           labelStyle={{paddingTop:5,color:"black",fontSize:20,fontWeight:"100"}}
           onChangeText={text => setKg(text)}
+          keyboardType={"numeric"}
         />
          <Input
           label="Reps (回数)"
@@ -60,6 +61,7 @@ const TrainingMemoScreen = (props) => {
           inputStyle={{padding:10}}
           labelStyle={{paddingTop:5,color:"black",fontSize:20,fontWeight:"100"}}
           onChangeText={text => setReps(text)}
+          keyboardType={"numeric"}
         />
          <Input
           label="セット数"
@@ -68,6 +70,7 @@ const TrainingMemoScreen = (props) => {
           inputStyle={{padding:10}}
           labelStyle={{paddingTop:5,color:"black",fontSize:20,fontWeight:"100"}}
           onChangeText={text => setSetCount(text)}
+          keyboardType={"numeric"}
         />
 
         <CircleButton name={"check"} onPress={handleSubmit}/>

@@ -1,5 +1,5 @@
 import React , {useState} from 'react';
-import { StyleSheet, View,Text, TextInput, TouchableHighlight } from 'react-native';
+import { StyleSheet, View,Text, TextInput, TouchableHighlight,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import firebase from "firebase"
 import { CommonActions } from '@react-navigation/native'
 
@@ -68,6 +68,9 @@ const SignupScreen = (props) => {
          "腕": [
            "アームカール"
          ],
+         "腹":[
+           "アブドミナル","腹筋"
+         ],
          "その他": [
            "ランニング","ウォーキング",
          ]
@@ -125,16 +128,18 @@ const SignupScreen = (props) => {
   
 
   return (
-    <View style={styles.container}>
-      
-      <TextInput style={styles.input} value={email} placeholder="Email" 
-      onChangeText={text => setEmail(text)} autoCapitalize="none" autoCorrect={false}/>
-      <TextInput style={styles.input} value={password} placeholder="Password" onChangeText={text => setPassword(text)} autoCapitalize="none" autoCorrect={false} secureTextEntry={true}/>
-      
-      <TouchableHighlight style={styles.button} underlayColor="#C70F66" onPress={handleSignup}>
-        <Text style={styles.buttonTitle}>送信する</Text>
-      </TouchableHighlight>
-    </View>
+    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+      <View style={styles.container}>
+        
+        <TextInput style={styles.input} value={email} placeholder="Email" 
+        onChangeText={text => setEmail(text)} autoCapitalize="none" autoCorrect={false}/>
+        <TextInput style={styles.input} value={password} placeholder="Password" onChangeText={text => setPassword(text)} autoCapitalize="none" autoCorrect={false} secureTextEntry={true}/>
+        
+        <TouchableHighlight style={styles.button} underlayColor="#C70F66" onPress={handleSignup}>
+          <Text style={styles.buttonTitle}>送信する</Text>
+        </TouchableHighlight>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

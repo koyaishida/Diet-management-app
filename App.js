@@ -49,6 +49,14 @@ firebase.initializeApp(firebaseConfig);
             shadowOffset: {width: 0, height: 1},
             shadowOpacity: 0.3,
             shadowRadius:2,
+            backgroundColor:"green",
+        },
+        headerTitleStyle:{
+         color:"#fff"
+        },
+        headerBackTitle:"BACK",
+        headerBackTitleStyle:{
+          color:"#fff"
         }}}>  
          <Stack.Screen name="Login" component={LoginScreen}
           options={{ title: "ログイン"}} /> 
