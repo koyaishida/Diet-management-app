@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
   date:{
     textAlign:"center",
     fontSize:20,
-    fontWeight:"bold",
-    backgroundColor:"green",
+    fontWeight:"500",
+    backgroundColor:"#00b2b2",
     color:"#fff",
   },
   

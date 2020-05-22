@@ -9,7 +9,7 @@ import Modal from "react-native-modal";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFDF6",
+    backgroundColor: "#fdf8f8",
     width: "100%",
     paddingTop: 72,
     paddingRight: 24,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     borderRadius:14,
   },
   modalButton:{
-    backgroundColor:"green",
+    backgroundColor:"#00b2b2",
     margin:30,
     padding:10,
     width:200,

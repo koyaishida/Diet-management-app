@@ -27,7 +27,14 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     height: 350,
     width:"100%",
-  }
+  },
+  dateLabel:{
+    textAlign:"center",
+    fontSize:20,
+    fontWeight:"500",
+    backgroundColor:"#00b2b2",
+    color:"#fff",
+  },
   
 });
 const older = ((a,b)=>(a.date.seconds - b.date.seconds))
@@ -140,6 +147,7 @@ const  FoodManagementScreen = (props)=> {
               <Text>カロリーオーバー</Text>
             </View>
           </View>
+          <Text style={styles.dateLabel}>{currentDay}の食事</Text>
         
           <FoodList 
             currentFoodList={currentFoodList}

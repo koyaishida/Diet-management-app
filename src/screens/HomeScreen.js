@@ -12,7 +12,7 @@ const screenHeight = Dimensions.get("window").height
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"#FFFDF6",
+    backgroundColor:"#f3fbf7",
     width: "100%",
   },
   chartTitle:{
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     margin:5,
   },
   button: {
-    backgroundColor: "green",
+    backgroundColor: "#00b2b2",
     height: screenHeight/20,
     borderRadius: 14,
     justifyContent: "center",
@@ -48,6 +48,12 @@ const styles = StyleSheet.create({
     width: "75%",
     alignSelf: "center",
     marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    zIndex: 1,
+    elevation:4,
   },
   buttonTitle: {
     fontSize:20,
@@ -56,10 +62,11 @@ const styles = StyleSheet.create({
 });
 
 const chartConfig = {
-  backgroundColor: "#FFF",
-  backgroundGradientFrom: "#FFF",
+  backgroundColor: "#fff",
+  backgroundGradientFrom: "#fff",
   backgroundGradientTo: "#FFF",
-  color: (opacity = 0.5) => `rgba(0, 0, 0,0.5)`,
+  color: (opacity = 0.5) => `rgba(0, 0, 0,0.6)`,
+  fillShadowGradient:"#bdebd4"
 }
 
 
@@ -238,7 +245,7 @@ const HomeScreen = (props)=> {
         }}
         formatYLabel={decimalPoint}
         yAxisSuffix=" kg"
-        style={styles.lineChart} 
+        // style={styles.lineChart} 
         width={screenWidth} height={screenHeight/4.2} 
         chartConfig={chartConfig}
         withInnerLines={false}
@@ -258,7 +265,7 @@ const HomeScreen = (props)=> {
         }}
         formatYLabel={toInteger}
         yAxisSuffix="kcal"
-        style={styles.lineChart} 
+        // style={styles.lineChart} 
         width={screenWidth} height={screenHeight/4.2} 
         chartConfig={chartConfig}
         withInnerLines={false}

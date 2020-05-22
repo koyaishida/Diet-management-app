@@ -27,11 +27,11 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     fontSize:20,
   },
-  trainingDay:{
+  dateLabel:{
     textAlign:"center",
     fontSize:20,
-    fontWeight:"bold",
-    backgroundColor:"green",
+    fontWeight:"500",
+    backgroundColor:"#00b2b2",
     color:"#fff",
   },
 });
@@ -182,7 +182,7 @@ const  TrainingManagementScreen = (props)=> {
             <Text>その他</Text>
           </View>
         </View>
-        <Text style={styles.trainingDay}>{currentDay}のトレーニング記録</Text>
+        <Text style={styles.dateLabel}>{currentDay}のトレーニング</Text>
         <TrainingList 
           trainingList={currentTrainingList}
           navigation={props.navigation}

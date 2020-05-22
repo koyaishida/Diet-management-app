@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   labelContainer: {
     display: "flex",
     flexDirection:"row",
-    backgroundColor: 'green',
+    backgroundColor: "#007979",
     color: "#fff",
   },
   addMenu: {
