@@ -51,7 +51,7 @@ const FoodAddScreen = (props) => {
      db.collection(`users/${currentUser.uid}/food`).add({
        kcal: kcal,
        foodMemo: foodMemo,
-       date: date ? date: new Date()
+       date: date ? new Date(date) : new Date()
      })
     .then(()=> {
       props.navigation.navigate("FoodManagement")

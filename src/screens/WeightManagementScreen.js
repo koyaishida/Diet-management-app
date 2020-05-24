@@ -80,7 +80,6 @@ const  WeightManagementScreen = (props)=> {
      })
 
      const dotDays = Object.assign(...markedDays.map(item => ({ [item.date]: item.dot })))
-     
      const markedDates = {...dotDays,[currentDay]:{selected:true,selectedColor:"#ffa500"}}
 
      
@@ -88,10 +87,13 @@ const  WeightManagementScreen = (props)=> {
     return (
       <View style={styles.container}>
           <Calendar 
-          onDayPress = {((day)=>{setCurrentDay(day.dateString),setTimestamp(new Date(day.timestamp))})}
-          style={styles.calendar}
-           markedDates = {markedDates}
-           markingType={'multi-dot'}
+            onDayPress = {((day)=>{
+              setCurrentDay(day.dateString),
+              setTimestamp(day.timestamp)}
+            )}
+            style={styles.calendar}
+            markedDates = {markedDates}
+            markingType={'multi-dot'}
           />
           <Text style={styles.date}>{currentDay}の体重記録</Text>
           <WeightList 

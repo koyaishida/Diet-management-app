@@ -145,7 +145,10 @@ const  TrainingManagementScreen = (props)=> {
       <View style={styles.container}>
         
         <Calendar 
-          onDayPress = {((day)=>{setCurrentDay(day.dateString),setTimestamp(new Date(day.timestamp))})}
+          onDayPress = {((day)=>{
+            setCurrentDay(day.dateString),
+            setTimestamp(day.timestamp)}
+          )}
           style={styles.calendar}
           markedDates={
             markedDays

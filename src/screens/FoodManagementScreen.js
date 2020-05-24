@@ -130,12 +130,13 @@ const  FoodManagementScreen = (props)=> {
     return (
       <View style={styles.container}>
           <Calendar 
-          onDayPress = {((day)=>{setCurrentDay(day.dateString),setTimestamp(new Date(day.timestamp))})}
-          style={styles.calendar}
-          markedDates = {
-            markedDates
-          }
-          markingType={'multi-dot'}
+            onDayPress = {((day)=>{
+              setCurrentDay(day.dateString),
+              setTimestamp(day.timestamp)}
+            )}
+            style={styles.calendar}
+            markedDates={markedDates}
+            markingType={'multi-dot'}
           />
           <View style={styles.dotsDescription}>
             <View style={styles.dotItem}>

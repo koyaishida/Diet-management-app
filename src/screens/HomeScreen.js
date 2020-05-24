@@ -70,11 +70,11 @@ const chartConfig = {
 }
 
 
-const decimalPoint  = (y)=>{
+const formatWeightYLabel  = (y)=>{
   return parseFloat(y).toFixed(1)
 }
 
-const toInteger = (y)=>{
+const formatKcalYLabel = (y)=>{
   return parseFloat(y).toFixed()
 }
 
@@ -243,9 +243,8 @@ const HomeScreen = (props)=> {
           labels: weightList.length==0 ? [0]:displayChart(weightLabels),
           datasets: [{data:weightList.length==0 ? [0]:displayChart(weightList)}]
         }}
-        formatYLabel={decimalPoint}
-        yAxisSuffix=" kg"
-        // style={styles.lineChart} 
+        formatYLabel={formatWeightYLabel}
+        yAxisSuffix=" kg" 
         width={screenWidth} height={screenHeight/4.2} 
         chartConfig={chartConfig}
         withInnerLines={false}
@@ -263,9 +262,8 @@ const HomeScreen = (props)=> {
           labels: kcalList.length == 0 ? [0]: displayChart(kcalLabels),
           datasets: [{data:kcalList.length == 0 ? [0]: displayChart(kcalList)}]
         }}
-        formatYLabel={toInteger}
-        yAxisSuffix="kcal"
-        // style={styles.lineChart} 
+        formatYLabel={formatKcalYLabel}
+        yAxisSuffix="kcal" 
         width={screenWidth} height={screenHeight/4.2} 
         chartConfig={chartConfig}
         withInnerLines={false}

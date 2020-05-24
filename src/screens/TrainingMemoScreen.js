@@ -31,10 +31,9 @@ const TrainingMemoScreen = (props) => {
         kg : kg,
         reps : reps,
         setCount : setCount,
-        date : date ? date:new Date(),
+        date : date ? new Date(date):new Date(),
        })
-      .then(()=> {
-        console.log(date,"date")
+      .then(()=>{
         props.navigation.navigate("TrainingMenu")
       })
       .catch((error)=>{

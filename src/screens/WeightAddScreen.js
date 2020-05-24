@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
 const WeightAddScreen = (props) => {
   const [weight,setWeight] =useState()
   const [bodyFatPercentage,setBodyFatPercentage] =useState()
+  const {date} = props.route.params
   
   const disabled =()=>{
     if(isNaN(parseFloat(weight)) || weight === undefined){
@@ -41,7 +42,7 @@ const WeightAddScreen = (props) => {
        db.collection(`users/${currentUser.uid}/weight`).add({
             weight : weight,
             bodyFatPercentage : bodyFatPercentage,
-            date: new Date()
+            date: date ? new Date(date) : new Date()
        })
       .then(()=> {
         props.navigation.navigate("WeightManagement")
