@@ -1,4 +1,4 @@
-import React ,{useState,useRef}from 'react';
+import React ,{useState,useRef, useEffect}from 'react';
 import { StyleSheet, View, Text,ScrollView,Dimensions} from 'react-native';
 import firebase from "firebase"
 import { CheckBox,Input,Button ,ButtonGroup} from 'react-native-elements'
@@ -56,19 +56,18 @@ const styles = StyleSheet.create({
     height:35,
     borderBottomColor:"#ddd",
     borderBottomWidth:1,
-    marginBottom:30,
+    marginBottom:10,
   },
-  scrollContainer:{
-    height:screenHeight-100,
-    justifyContent:"center"
-  }
+  // scrollContainer:{
+  //   height:screenHeight-100,
+  // }
 });
 
 
 
 
 
-const  PersonalDataScreen =(props)=>{
+const  SettingScreen =(props)=>{
   const [age,setAge]=useState()
   const [height,setHeight]=useState()
   const [weight,setWeight]=useState()
@@ -79,7 +78,6 @@ const  PersonalDataScreen =(props)=>{
   const [dailyBasalMetabolism,setDailyBasalMetabolism]=useState()
   const [requiredKcal,setRequiredKcal]=useState()
   const [targetWeight,setTargetWeight]=useState()
-  const [scrollEnabled,setScrollEnabled]=useState(false)
   const scroll = useRef()
   
   const buttons = ["低い", "普通", "高い"]
@@ -138,13 +136,13 @@ const  PersonalDataScreen =(props)=>{
             age:age,
             height:height,
             weight:weight,
-            bmi:bmi,
+            bmi:30,
             isMen:isMen,
             isWomen:isWomen,
             selectedIndex:selectedIndex,
-            dailyBasalMetabolism:dailyBasalMetabolism,
-            requiredKcal:requiredKcal,
+            dailyBasalMetabolism:Math.floor(basalMetabolism*weight),
             targetWeight:targetWeight,
+            requiredKcal:Math.floor(basalMetabolism*activityLevel*weight),
           })
          .then(()=> {
            props.navigation.navigate("Home")
@@ -156,24 +154,36 @@ const  PersonalDataScreen =(props)=>{
       }
   
        
-      const calculate =(scroll)=>{
-        setBmi(Math.floor(weight/((height/100)*(height/100))))
-        setDailyBasalMetabolism(Math.floor(basalMetabolism*weight))
-        setRequiredKcal(Math.floor(basalMetabolism*activityLevel*weight))
-         
-         scroll.scrollToEnd()
-         setScrollEnabled(true)
-      }
       let disabled = true
       if(selectedIndex !== 3 && age !== false &&weight !== false && height !== false){
           disabled = false
       }
+      useEffect(()=>{
+        const {currentUser} = firebase.auth();
+        const db =firebase.firestore()
+        db.collection(`users/${currentUser.uid}/personalData`)
+        .onSnapshot((querySnapshot)=>{
+          const personalData = []
+          querySnapshot.forEach((doc)=>{
+            personalData.push({...doc.data(),key: doc.id})
+          })
+          console.log(personalData,"pd")
+          setIsMen(personalData[0].isMen)
+          setIsWomen(personalData[0].isWomen)
+          setAge(personalData[0].age)
+          setHeight(personalData[0].height)
+          setWeight(personalData[0].weight)
+          setSelectedIndex(personalData[0].selectedIndex)
+          setRequiredKcal(requiredKcal)
+          setTargetWeight(personalData[0].targetWeight)
+        })    
+        return () => {console.log('Clean Up ')};
+      },[])
     
-  
+      console.log(targetWeight,"tw")
     return (
-      <ScrollView ref={scroll} scrollEnabled={scrollEnabled}>
+      <ScrollView >
       <View style={styles.container}>
-        <View style={{height:screenHeight}}>
           <Text style={styles.label}>性別</Text>
           <View style={styles.checkBox}>
             <CheckBox
@@ -183,14 +193,16 @@ const  PersonalDataScreen =(props)=>{
               uncheckedIcon="circle-o"
               containerStyle={{}}
               checked={isMen}
-              onPress={()=>{isMen ? setIsMen(false):setIsMen(true),setIsWomen(false)}}/>
+              onPress={()=>{isMen ? setIsMen(false):setIsMen(true),setIsWomen(false)}}
+            />
             <CheckBox
               center
               title="女性"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={isWomen}
-              onPress={()=>{isWomen ? setIsWomen(false):setIsWomen(true),setIsMen(false)}}/>
+              onPress={()=>{isWomen ? setIsWomen(false):setIsWomen(true),setIsMen(false)}}
+            />
           </View> 
           <Input
             label="年齢"
@@ -199,7 +211,8 @@ const  PersonalDataScreen =(props)=>{
             inputStyle={{padding:5}}
             labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
             onChangeText={text => setAge(text)}
-            keyboardType={"numeric"}/>
+            keyboardType={"numeric"}
+          />
           <Input
             label="身長 (cm)"
             placeholder="半角数字で入力して下さい"
@@ -207,7 +220,8 @@ const  PersonalDataScreen =(props)=>{
             inputStyle={{padding:5}}
             labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
             onChangeText={text => setHeight(text)}
-            keyboardType={"numeric"}/>
+            keyboardType={"numeric"}
+          />
           <Input
             label="体重 (kg)"
             placeholder="半角数字で入力して下さい"
@@ -215,7 +229,8 @@ const  PersonalDataScreen =(props)=>{
             inputStyle={{padding:5}}
             labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
             onChangeText={text => setWeight(text)}
-            keyboardType={"numeric"}/>
+            keyboardType={"numeric"}
+          />
           <Text style={styles.label}>身体活動レベルを選択して下さい</Text>
           <View  style={styles.table}>
             <Text style={[styles.tableLabel,styles.tableHead]}>身体活動レベル</Text>
@@ -237,26 +252,20 @@ const  PersonalDataScreen =(props)=>{
             onPress={(index)=>setSelectedIndex(index)}
             selectedIndex={selectedIndex}
             buttons={buttons}
-            containerStyle={{height: 34,marginTop:10,marginBottom:10}}/>
-          <Button
-            title="計算する"
-            disabled={disabled}
-            onPress={()=>{calculate(scroll.current)}}
-            buttonStyle={{borderRadius:25}}
-            containerStyle={{borderRadius:25,width:"80%",alignSelf:"center",marginTop:15}}/>
-        </View>
+            containerStyle={{height: 34,marginTop:10,marginBottom:10}}
+          />
         <View style={styles.scrollContainer}>
           <Text style={styles.text}>あなたのBMIは</Text>
           <View style={styles.resultContainer}>
-            <Text style={styles.result}>{bmi}</Text>
+            <Text style={styles.result}>{Math.floor(weight/((height/100)*(height/100)))}</Text>
           </View>
           <Text style={styles.text}>あなたの1日の基礎代謝量</Text>
           <View style={styles.resultContainer}>
-            <Text style={styles.result}>{`${dailyBasalMetabolism}  kcal/日`}</Text>
+            <Text style={styles.result}>{`${Math.floor(basalMetabolism*weight)}  kcal/日`}</Text>
           </View>
           <Text style={styles.text}>あなたの1日に必要な推定エネルギー量</Text>
           <View style={styles.resultContainer}>
-            <Text style={styles.result}>{`${requiredKcal}  kcal/日`}</Text>
+            <Text style={styles.result}>{`${ Math.floor(basalMetabolism*activityLevel*weight)}  kcal/日`}</Text>
           </View>
           <Input
             label="目標体重を設定して下さい(kg)"
@@ -268,11 +277,11 @@ const  PersonalDataScreen =(props)=>{
             onChangeText={text => setTargetWeight(text)}
             keyboardType={"numeric"}
           />
-          <Button title="この内容で登録する"
+          <Button title="この内容で更新する"
             onPress={()=>{handleSubmit()}}
             titleStyle={{fontWeight:"bold",fontSize:20}}
             buttonStyle={{borderRadius:25,padding:18}}
-            containerStyle={{borderRadius:25,width:"80%",marginRight:"auto",marginLeft:"auto",marginTop:24}}>
+            containerStyle={{borderRadius:25,width:"80%",marginRight:"auto",marginLeft:"auto",marginTop:24,marginBottom:50}}>
           </Button>
         </View>
       </View>  
@@ -280,4 +289,4 @@ const  PersonalDataScreen =(props)=>{
     );
 }
 
-export default PersonalDataScreen
+export default SettingScreen

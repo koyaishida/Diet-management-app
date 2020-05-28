@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     justifyContent: "center",
     alignItems:"center",
-    width: "75%",
+    width: screenWidth/1.3,
     alignSelf: "center",
     marginTop: 10,
     shadowColor: "#000",
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     elevation:4,
   },
   buttonTitle: {
-    fontSize:20,
+    fontSize:screenHeight/40,
     color: "#fff",
   },
 });
@@ -228,6 +228,7 @@ const HomeScreen = (props)=> {
     
     return () => {console.log('Clean Up ')};
   },[chartVisible])
+  //console.log(screenHeight/20,"height")
 
   
   return (
@@ -305,7 +306,7 @@ const HomeScreen = (props)=> {
         <Text style={styles.buttonTitle} >体重の記録</Text>
         </TouchableOpacity>
       </View>
-      <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")} display={false}/>
+      {/* <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")} display={false}/> */}
     </View>
   ); 
 }

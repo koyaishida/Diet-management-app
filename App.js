@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {TouchableOpacity,View,Text} from 'react-native';
+import { FontAwesome } from '@expo/vector-icons'
 import firebase from "firebase"
 import ENV from "./env.json"
 import HomeScreen from './src/screens/HomeScreen';
@@ -16,6 +18,8 @@ import TrainingMenuScreen from './src/screens/TrainingMenuScreen';
 import TrainingMemoScreen from './src/screens/TrainingMemoScreen';
 import TrainingAddScreen from './src/screens/TrainingAddScreen';
 import PersonalDataScreen from './src/screens/PersonalDataScreen';
+import SettingScreen from './src/screens/SettingScreen';
+import { NavigationEvents } from 'react-navigation';
 
 require("firebase/firestore")
 
@@ -41,6 +45,7 @@ firebase.initializeApp(firebaseConfig);
 
   
  const App = ()=>{
+
    return(
      <NavigationContainer>
        <Stack.Navigator screenOptions={{
@@ -60,13 +65,28 @@ firebase.initializeApp(firebaseConfig);
         }}}>  
          <Stack.Screen name="Login" component={LoginScreen}
           options={{ title: "ログイン"}} /> 
-        <Stack.Screen name="Home" component={HomeScreen} 
-          options={{ title: "HOME"}}/> 
+
+         <Stack.Screen name="Home" component={HomeScreen} 
+          options={({navigation})=>({ 
+          title: "HOME",
+          headerRight: () => (
+            <TouchableOpacity style={{marginRight:20}} 
+            onPress={()=>{navigation.navigate("Setting")}} 
+            activeOpacity={0.5}>
+              <View>
+                <Text style={{color:"#fff"}}>
+                  <FontAwesome name={"cog"} size={25}/>
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ),})}/> 
          
          <Stack.Screen name="Signup" component={SignupScreen} 
           options={{ title: "新規登録" }}/>
 
          <Stack.Screen name="PersonalData" component={PersonalDataScreen}
+          options={{ title: "設定" }} /> 
+         <Stack.Screen name="Setting" component={SettingScreen}
           options={{ title: "設定" }} /> 
          
          <Stack.Screen name="WeightManagement" component={WeightManagementScreen} 
@@ -83,7 +103,8 @@ firebase.initializeApp(firebaseConfig);
           options={{ title: 'トレーニング管理' }}
          />   
          <Stack.Screen name="TrainingMenu" component={TrainingMenuScreen} 
-          options={{ title: "トレーニングメニュー" }}/>   
+          options={{ title: "トレーニングメニュー" }}/>  
+
          <Stack.Screen name="TrainingMemo" component={TrainingMemoScreen} 
           options={({ route }) => ({ title: route.params.trainingMenu })}
          />   

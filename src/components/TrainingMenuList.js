@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
   addMenu: {
     color: "#fff",
     fontSize: 28,
-    lineHeight: 38,
+    lineHeight: 50,
+    textAlignVertical:"top"
   },
   leftAction:{
     backgroundColor:"red"

@@ -3,10 +3,10 @@ import { StyleSheet, Text, View ,TouchableOpacity} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
-  memoAdd:{
+  container:{
     position: "absolute",
     bottom: 32,
-    right: 32,
+    right: 18,
     width: 48,
     height: 48,
     backgroundColor:"#E31676",
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     elevation:4,
   },
-  memoAddButton: {
+  innerText: {
     fontSize: 24,
     textAlign: "center",
     lineHeight: 48,
@@ -40,9 +40,9 @@ const CircleButton = (props) =>{
   let name = props.name
 
   return (
-  <TouchableOpacity style={[styles.memoAdd,style,{backgroundColor: bgColor}]} onPress={onPress} activeOpacity={0.5} disabled={disabled}>
+  <TouchableOpacity style={[styles.container,style,{backgroundColor: bgColor}]} onPress={onPress} activeOpacity={0.5} disabled={disabled}>
     <View>
-      <Text style={[styles.memoAddButton,{color: textColor}]}>
+      <Text style={[styles.innerText,{color: textColor}]}>
         <FontAwesome name={name} size={25}/>
       </Text>
     </View>
