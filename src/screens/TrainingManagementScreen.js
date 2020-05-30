@@ -3,7 +3,7 @@ import { StyleSheet, View,Text} from 'react-native';
 import TrainingList from "../components/TrainingList"
 import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
-import {Calendar} from 'react-native-calendars'
+import {Calendar} from 'react-native-calendars';
 
 
 
@@ -75,72 +75,79 @@ const  TrainingManagementScreen = (props)=> {
     return {date:dateToString(item.date),part:item.part}
   })
   
+  
   const markedList = [0]
+  const breast = {key:"breast",color:"red"}
+  const back = {key:"back",color:"green"}
+  const shoulder = {key:"shoulder",color:"blue"}
+  const arm = {key:"arm",color:"orange"}
+  const  abs = {key:"abs",color:"#ff6ab5"}
+  const leg = {key:"leg",color:"purple"}
+  const other = {key:"other",color:"black"}
   
   for(let i = 0 ; i < dotList.length; i++){
-    const addMarkedList = (dotColor)=>{
+    const addMarkedList = (part)=>{
       markedList.push({
         date:[dotList[i].date],
-        dot:{dots:[{color:dotColor}]}
+        dot:{dots:[part]}
       })
     }
-    const addDots = (dotColor)=>{
-      markedList[markedList.length-1].dot.dots.push({color:dotColor})
+    const addDots = (part)=>{
+      if( markedList[markedList.length-1].dot.dots.indexOf(part)===-1){
+        markedList[markedList.length-1].dot.dots.push(part)
+      }
     }
     if(i == 0 || dotList[i].date !== dotList[i-1].date){
       if(dotList[i].part == "胸"){
-        addMarkedList("red")
+        addMarkedList(breast)
       }
       else if(dotList[i].part =="背中"){
-        addMarkedList("green")
+        addMarkedList(back)
       }
       else if(dotList[i].part=="肩"){
-        addMarkedList("blue")
+        addMarkedList(shoulder)
       }
       else if(dotList[i].part=="腕"){
-        addMarkedList("yellow")
+        addMarkedList(arm)
       }
       else if(dotList[i].part=="腹"){
-        addMarkedList("gray")
+        addMarkedList(abs)
       }
       else if(dotList[i].part=="脚"){
-        addMarkedList("purple")
+        addMarkedList(leg)
       }else if(dotList[i].part=="その他"){
-        addMarkedList("black")
+        addMarkedList(other)
       }
     }else if(i > 0){
-       if(dotList[i].date == dotList[i-1].date && dotList[i].part !== dotList[i-1].part){
+      if(dotList[i].date == dotList[i-1].date){
            if(dotList[i].part == "胸"){
-             addDots("red")
+             addDots(breast)
            }
             else if(dotList[i].part =="背中"){
-              addDots("green")
+              addDots(back)
             }
             else if(dotList[i].part=="肩"){
-              addDots("blue")
+              addDots(shoulder)
            }
             else if(dotList[i].part=="腕"){
-              addDots("yellow")
+              addDots(arm)
            }
             else if(dotList[i].part=="腹"){
-              addDots("gray")
+              addDots(abs)
            }
             else if(dotList[i].part=="脚"){
-              addDots("purple")
+              addDots(leg)
            }
             else if(dotList[i].part=="その他"){
-              addDots("black")
-           }    
-      }else if(dotList[i].date == dotList[i-1].date && dotList[i].part == dotList[i-1].part){
-        
-      }
+              addDots(other)
+           } 
+          }   
     }
   }
   const dotDays = Object.assign(...markedList.map(item => ({ [item.date]: item.dot })));
   const markedDays = {...dotDays,[currentDay]:{selected:true,selectedColor:"#ffa500"}}
 
   
-
     return (
       <View style={styles.container}>
         
@@ -169,11 +176,11 @@ const  TrainingManagementScreen = (props)=> {
             <Text>肩</Text>
           </View>
           <View style={styles.dotsDescription}>
-            <Text style={{color:"yellow",fontWeight:"bold"}}>・</Text>
+            <Text style={{color:"orange",fontWeight:"bold"}}>・</Text>
             <Text>腕</Text>
           </View>
           <View style={styles.dotsDescription}>
-            <Text style={{color:"gray",fontWeight:"bold"}}>・</Text>
+            <Text style={{color:"#ff6ab5",fontWeight:"bold"}}>・</Text>
             <Text>腹</Text>
           </View>
           <View style={styles.dotsDescription}>

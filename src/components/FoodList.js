@@ -83,10 +83,11 @@ const  FoodList =(props)=> {
     setDeleteItemKey(item.key)
   }
   const renderFood =({item})=> {
+    const {kcal,foodMemo,key} = item
     return(
       <Swipeable renderRightActions={renderRightActions}
       onSwipeableOpen={()=>{getKey(item)}} >
-          <TouchableOpacity style={styles.listItemContainer} onPress={()=>{props.navigation.navigate("FoodDetail",{foodData:item})}}>
+          <TouchableOpacity style={styles.listItemContainer} onPress={()=>{props.navigation.navigate("FoodDetail",{kcal:kcal,foodMemo:foodMemo,key:key})}}>
             <Text style={styles.foodTitle}>{item.foodMemo}</Text>
             <View style={styles.kcal}>
               <Text style={styles.kcalValue}>{item.kcal}</Text>

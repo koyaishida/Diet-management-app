@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   unit :{
     fontSize : 12,
     lineHeight: 60,
+    paddingLeft:3,
   },
   leftAction:{
     backgroundColor:"red"

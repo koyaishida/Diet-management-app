@@ -1,9 +1,8 @@
 import React ,{useState,useRef, useEffect}from 'react';
-import { StyleSheet, View, Text,ScrollView,Dimensions} from 'react-native';
+import { StyleSheet, View, Text,ScrollView} from 'react-native';
 import firebase from "firebase"
 import { CheckBox,Input,Button ,ButtonGroup} from 'react-native-elements'
 
-const screenHeight = Dimensions.get("window").height
 
 const styles = StyleSheet.create({
   container: {
@@ -58,9 +57,6 @@ const styles = StyleSheet.create({
     borderBottomWidth:1,
     marginBottom:10,
   },
-  // scrollContainer:{
-  //   height:screenHeight-100,
-  // }
 });
 
 
@@ -71,14 +67,11 @@ const  SettingScreen =(props)=>{
   const [age,setAge]=useState()
   const [height,setHeight]=useState()
   const [weight,setWeight]=useState()
-  const [bmi,setBmi]=useState()
   const [isMen,setIsMen]=useState(true)
   const [isWomen,setIsWomen]=useState(false)
   const [selectedIndex,setSelectedIndex]=useState(3)
-  const [dailyBasalMetabolism,setDailyBasalMetabolism]=useState()
   const [requiredKcal,setRequiredKcal]=useState()
   const [targetWeight,setTargetWeight]=useState()
-  const scroll = useRef()
   
   const buttons = ["低い", "普通", "高い"]
 
