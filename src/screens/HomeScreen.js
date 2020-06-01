@@ -2,7 +2,6 @@ import React ,{useState,useEffect}from 'react';
 import { StyleSheet, View, Text,TouchableOpacity,Dimensions} from 'react-native';
 import firebase from "firebase"
 import {LineChart} from "react-native-chart-kit"
-import CircleButton from "../elements/CircleButton"
 import { FontAwesome } from '@expo/vector-icons';
 
 
@@ -88,8 +87,9 @@ const currentDay = new Date().toISOString().split("T")[0]
 
 
 const HomeScreen = (props)=> {
-  const [weightLabels,setWeightLabels] = useState([])
+  const [weightData,setWeightData] = useState([])
   const [weightList,setWeightList] = useState([0])
+  const [weightLabels,setWeightLabels] = useState([])
   const [kcalList,setKcalList] = useState([0])
   const [currentKcal,setCurrentKcal] = useState([])
   const [currentWeight,setCurrentWeight] = useState([])
@@ -141,28 +141,29 @@ const HomeScreen = (props)=> {
         weightData.push({...doc.data(),key: doc.id})
       })
       const sortedWeightData = weightData.sort(older)
-      //体重の値の取得
-       const weightList =[]
+      // //体重の値の取得
+      const weightList =[]
 
       sortedWeightData.forEach((item)=>{
         weightList.push(parseFloat(item.weight))
       })
       setWeightList(weightList)
-      
+    
       //体重のラベルの取得
-       const weightLabels = [];
-      
+      const weightLabels = [];
+    
       sortedWeightData.forEach((a)=>{
         weightLabels.push(dateToString(a.date).slice(5))
       })
       setWeightLabels(weightLabels)
-      
+    
 
       if(weightData.length == 0){
         setCurrentWeight(0)
       }else{
         setCurrentWeight(weightList[weightList.length-1])
         }
+      
     })
 
 
@@ -173,11 +174,11 @@ const HomeScreen = (props)=> {
       querySnapshot.forEach((doc)=>{
         foodData.push({...doc.data(),key: doc.id})
       })
-      const sortedKcalData = foodData.sort(older)
+    const sortedKcalData = foodData.sort(older)
       
       
       //kcalの加工
-       const kcalList =[]
+      const kcalList =[]
       for(let i = 0; i < sortedKcalData.length ; i++){
         if(i === 0){
           kcalList.push(parseFloat(sortedKcalData[i].kcal))
@@ -190,7 +191,7 @@ const HomeScreen = (props)=> {
         }
       }
       setKcalList(kcalList)
-      
+        
       //kcalLabelの加工
       const kcalLabels = [];
       for (let i = 0; i < sortedKcalData.length; i++){
@@ -207,9 +208,9 @@ const HomeScreen = (props)=> {
 
       if(kcalLabels[kcalLabels.length-1] !== currentDay.slice(5)){
         setCurrentKcal(0)
-       }else{
+        }else{
           setCurrentKcal(kcalList[kcalList.length-1])
-         }
+          }
     })
     
 
@@ -228,9 +229,7 @@ const HomeScreen = (props)=> {
     
     return () => {console.log('Clean Up ')};
   },[chartVisible])
-  //console.log(screenHeight/20,"height")
 
-  
   return (
     <View style={styles.container}>
       <View style={{backgroundColor:"#fff"}}>
@@ -306,7 +305,7 @@ const HomeScreen = (props)=> {
         <Text style={styles.buttonTitle} >体重の記録</Text>
         </TouchableOpacity>
       </View>
-      {/* <CircleButton name={"cog"} onPress={()=>props.navigation.navigate("PersonalData")} display={false}/> */}
+     
     </View>
   ); 
 }

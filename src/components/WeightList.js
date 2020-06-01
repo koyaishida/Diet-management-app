@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 
 const styles = StyleSheet.create({
-  foodListContainer: {
+  WeightListContainer: {
     width: "100%",
     flex: 1,
   },
@@ -21,13 +21,10 @@ const styles = StyleSheet.create({
   },
   weight: {
     fontSize: 20,
-    width: "50%",
     lineHeight: 50,
-    textAlign:"center"
   },
   item:{
     flexDirection:"row",
-
   },
   bodyFatPercentageValue: {
     fontSize: 20,
@@ -54,7 +51,7 @@ const styles = StyleSheet.create({
 
 
 
-const  FoodList =(props)=> {
+const  WeightList =(props)=> {
   const [deleteItemKey,setDeleteItemKey]=useState()
 
    const handleDelete = ()=>{
@@ -101,11 +98,11 @@ const  FoodList =(props)=> {
     )
   }
   return (
-    <View style={styles.foodListContainer}>
+    <View style={styles.WeightListContainer}>
       <FlatList data={props.weightData} renderItem={renderWeight.bind(this)}/>
     </View>
   )  
 }
 
 
-export default FoodList ;
+export default WeightList ;

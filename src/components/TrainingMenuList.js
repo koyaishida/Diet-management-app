@@ -17,6 +17,8 @@ const styles = StyleSheet.create({
     padding: 12,
     fontWeight: "bold",
     width: "90%",
+    textAlignVertical:"top",
+    lineHeight: 25,
   },
   item: {
     padding: 12,
@@ -24,12 +26,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     backgroundColor: '#fff',
+    
   },
   labelContainer: {
     display: "flex",
     flexDirection:"row",
     backgroundColor: "#007979",
     color: "#fff",
+    height:50,
   },
   addMenu: {
     color: "#fff",

@@ -1,4 +1,4 @@
-import React ,{useState,useRef, useEffect}from 'react';
+import React ,{useState,useEffect}from 'react';
 import { StyleSheet, View, Text,ScrollView} from 'react-native';
 import firebase from "firebase"
 import { CheckBox,Input,Button ,ButtonGroup} from 'react-native-elements'
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     fontSize:16,
     paddingTop:5,
     paddingBottom:5,
+    paddingLeft:10,
   },
   table: {
     flexDirection : "row",
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
 
 
 const  SettingScreen =(props)=>{
+  const [email,setEmail]=useState()
   const [age,setAge]=useState()
   const [height,setHeight]=useState()
   const [weight,setWeight]=useState()
@@ -121,10 +123,9 @@ const  SettingScreen =(props)=>{
     
 
   
-  
+     const db = firebase.firestore();
+     const {currentUser} = firebase.auth();
      const handleSubmit = () => {
-        const db = firebase.firestore();
-        const {currentUser} = firebase.auth();
           db.collection(`users/${currentUser.uid}/personalData`).doc("PersonalData").set({
             age:age,
             height:height,
@@ -145,6 +146,16 @@ const  SettingScreen =(props)=>{
            console.error("Error adding document: ", error);
          });
       }
+     const handleChangeEmail = () => {
+      currentUser.updateEmail("user@example.com").then(function() {
+        // Update successful.
+        props.navigation.navigate("Home")
+        console.log("then")
+      }).catch(function(error) {
+        console.error("Error adding document: ", error);
+        // An error happened.
+      });
+     }
   
        
       let disabled = true
@@ -160,7 +171,6 @@ const  SettingScreen =(props)=>{
           querySnapshot.forEach((doc)=>{
             personalData.push({...doc.data(),key: doc.id})
           })
-          console.log(personalData,"pd")
           setIsMen(personalData[0].isMen)
           setIsWomen(personalData[0].isWomen)
           setAge(personalData[0].age)
@@ -169,14 +179,20 @@ const  SettingScreen =(props)=>{
           setSelectedIndex(personalData[0].selectedIndex)
           setRequiredKcal(requiredKcal)
           setTargetWeight(personalData[0].targetWeight)
-        })    
+        })
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            setEmail(user.email)
+          } else {
+           setEmail("メールアドレスが登録されていません。")
+          }
+        });
         return () => {console.log('Clean Up ')};
       },[])
     
-      console.log(targetWeight,"tw")
     return (
       <ScrollView >
-      <View style={styles.container}>
+        <View style={styles.container}>
           <Text style={styles.label}>性別</Text>
           <View style={styles.checkBox}>
             <CheckBox
@@ -224,7 +240,7 @@ const  SettingScreen =(props)=>{
             onChangeText={text => setWeight(text)}
             keyboardType={"numeric"}
           />
-          <Text style={styles.label}>身体活動レベルを選択して下さい</Text>
+          <Text style={styles.label}>身体活動レベル</Text>
           <View  style={styles.table}>
             <Text style={[styles.tableLabel,styles.tableHead]}>身体活動レベル</Text>
             <Text style={[styles.tableContent,styles.tableHead]}>日常生活の内容</Text>
@@ -247,7 +263,6 @@ const  SettingScreen =(props)=>{
             buttons={buttons}
             containerStyle={{height: 34,marginTop:10,marginBottom:10}}
           />
-        <View style={styles.scrollContainer}>
           <Text style={styles.text}>あなたのBMIは</Text>
           <View style={styles.resultContainer}>
             <Text style={styles.result}>{Math.floor(weight/((height/100)*(height/100)))}</Text>
@@ -261,10 +276,10 @@ const  SettingScreen =(props)=>{
             <Text style={styles.result}>{`${ Math.floor(basalMetabolism*activityLevel*weight)}  kcal/日`}</Text>
           </View>
           <Input
-            label="目標体重を設定して下さい(kg)"
+            label="目標体重(kg)"
             placeholder="半角数字で入力して下さい"
             value={targetWeight}
-            inputStyle={{padding:10,fontSize:20,height:60}}
+            inputStyle={{padding:10,fontSize:20,height:60,fontSize:28}}
             labelStyle={{paddingTop:5,color:"black",fontSize:20,fontWeight:"bold"}}
             containerStyle={{width:"90%"}}
             onChangeText={text => setTargetWeight(text)}
@@ -276,7 +291,21 @@ const  SettingScreen =(props)=>{
             buttonStyle={{borderRadius:25,padding:18}}
             containerStyle={{borderRadius:25,width:"80%",marginRight:"auto",marginLeft:"auto",marginTop:24,marginBottom:50}}>
           </Button>
-        </View>
+        <Input
+            label="メールアドレス"
+            placeholder="半角英数字で入力して下さい"
+            value={email}
+            inputStyle={{padding:5}}
+            labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
+            onChangeText={text => setEmail(text)}
+            keyboardType={"numeric"}
+        />
+        <Button title="メールアドレスを変更する"
+            onPress={()=>{handleChangeEmail()}}
+            titleStyle={{fontWeight:"bold",fontSize:20}}
+            buttonStyle={{borderRadius:25,padding:18}}
+            containerStyle={{borderRadius:25,width:"80%",marginRight:"auto",marginLeft:"auto",marginTop:24,marginBottom:50}}>
+          </Button>
       </View>  
       </ScrollView>
     );

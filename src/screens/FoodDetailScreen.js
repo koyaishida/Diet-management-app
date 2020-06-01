@@ -45,7 +45,6 @@ const FoodDetailScreen = (props) => {
   const foodData = props.route.params
   const [kcal,setKcal] =useState(foodData.kcal)
   const [foodMemo,setFoodMemo] =useState(foodData.foodMemo)
-  console.log(foodData,"fd")
 
   const handleSubmit = () => {
     const db =firebase.firestore()
