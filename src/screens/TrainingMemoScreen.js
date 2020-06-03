@@ -1,5 +1,5 @@
 import React ,{useState}from 'react';
-import { StyleSheet, View,TouchableWithoutFeedback,Keyboard } from 'react-native';
+import { StyleSheet, View,TouchableWithoutFeedback,Keyboard,KeyboardAvoidingView } from 'react-native';
 import CircleButton from "../elements/CircleButton"
 import { Input,} from 'react-native-elements'
 import firebase from "firebase"
@@ -42,6 +42,7 @@ const TrainingMemoScreen = (props) => {
   }
   
   return (
+    
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View  style={styles.container}>
         <Input
@@ -75,6 +76,7 @@ const TrainingMemoScreen = (props) => {
         <CircleButton name={"check"} onPress={handleSubmit}/>
       </View>
     </TouchableWithoutFeedback>
+    
   );
 }
 

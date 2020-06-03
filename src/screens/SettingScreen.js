@@ -1,5 +1,5 @@
 import React ,{useState,useEffect}from 'react';
-import { StyleSheet, View, Text,ScrollView} from 'react-native';
+import { StyleSheet, View, Text,ScrollView,KeyboardAvoidingView} from 'react-native';
 import firebase from "firebase"
 import { CheckBox,Input,Button ,ButtonGroup} from 'react-native-elements'
 
@@ -150,7 +150,7 @@ const  SettingScreen =(props)=>{
       currentUser.updateEmail("user@example.com").then(function() {
         // Update successful.
         props.navigation.navigate("Home")
-        console.log("then")
+        console.log("changed")
       }).catch(function(error) {
         console.error("Error adding document: ", error);
         // An error happened.
@@ -191,6 +191,8 @@ const  SettingScreen =(props)=>{
       },[])
     
     return (
+      <KeyboardAvoidingView behavior={"padding"}
+         keyboardVerticalOffset={80}>
       <ScrollView >
         <View style={styles.container}>
           <Text style={styles.label}>性別</Text>
@@ -291,6 +293,7 @@ const  SettingScreen =(props)=>{
             buttonStyle={{borderRadius:25,padding:18}}
             containerStyle={{borderRadius:25,width:"80%",marginRight:"auto",marginLeft:"auto",marginTop:24,marginBottom:50}}>
           </Button>
+        
         <Input
             label="メールアドレス"
             placeholder="半角英数字で入力して下さい"
@@ -298,16 +301,19 @@ const  SettingScreen =(props)=>{
             inputStyle={{padding:5}}
             labelStyle={{paddingTop:5,color:"black",fontSize:17,fontWeight:"100"}}
             onChangeText={text => setEmail(text)}
-            keyboardType={"numeric"}
+            autoCapitalize={"none"}
+            keyboardType={"email-address"}
         />
         <Button title="メールアドレスを変更する"
             onPress={()=>{handleChangeEmail()}}
             titleStyle={{fontWeight:"bold",fontSize:20}}
             buttonStyle={{borderRadius:25,padding:18}}
             containerStyle={{borderRadius:25,width:"80%",marginRight:"auto",marginLeft:"auto",marginTop:24,marginBottom:50}}>
-          </Button>
+        </Button>
+        
       </View>  
       </ScrollView>
+      </KeyboardAvoidingView>
     );
 }
 
