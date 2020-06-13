@@ -86,17 +86,20 @@ const  TrainingManagementScreen = (props)=> {
   const other = {key:"other",color:"black"}
   
   for(let i = 0 ; i < dotList.length; i++){
-    const addMarkedList = (part)=>{
-      markedList.push({
-        date:[dotList[i].date],
-        dot:{dots:[part]}
-      })
-    }
-    const addDots = (part)=>{
-      if( markedList[markedList.length-1].dot.dots.indexOf(part)===-1){
-        markedList[markedList.length-1].dot.dots.push(part)
-      }
-    }
+     const addMarkedList = (part)=>{
+       markedList.push({
+         date:[dotList[i].date],
+         dot:{dots:[part]}
+       })
+     }
+    
+     const addDots = (part)=>{
+       if( markedList[markedList.length-1].dot.dots.indexOf(part)===-1){
+         markedList[markedList.length-1].dot.dots.push(part)
+       }
+     }
+    
+
     if(i == 0 || dotList[i].date !== dotList[i-1].date){
       if(dotList[i].part == "胸"){
         addMarkedList(breast)

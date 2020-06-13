@@ -1,9 +1,10 @@
-import React, {useState}from 'react';
+import React, {useState, useEffect}from 'react';
 import { StyleSheet, View,Text, TextInput, TouchableHighlight,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import firebase from "firebase"
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { CommonActions } from '@react-navigation/native';
 import Modal from "react-native-modal";
+import * as SecureStore from 'expo-secure-store'
 
 
 const styles = StyleSheet.create({
@@ -86,29 +87,44 @@ const LoginScreen = (props) => {
 
   // const [email,setEmail] =useState("test2@gmail.com")
   // const [password,setPassword] =useState("password")
-   const [email,setEmail] =useState("k.157.2aic@gmail.com")
-   const [password,setPassword] =useState("k-a.157.2")
+  //  const [email,setEmail] =useState("k.157.2aic@gmail.com")
+  //  const [password,setPassword] =useState("k-a.157.2")
+   const [email,setEmail] =useState()
+   const [password,setPassword] =useState()
    const [isModalVisible,setIsModalVisible]=useState(false)
-   toggleModal = ()=>{
+   const toggleModal = ()=>{
      setIsModalVisible(!isModalVisible)
    }
+   
+   useEffect(()=>{
+      SecureStore.getItemAsync("email")
+      .then((email)=>{
+        setEmail(email)
+      })
+      SecureStore.getItemAsync("password")
+      .then((password)=>{
+        setPassword(password)
+      })
+   },[])
+   
 
   const handleLogin = () =>{
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then(()=>{
       console.log("success")
-        const resetAction = 
-          CommonActions.reset({
-            index:0,
-            routes: [
-              {name: "Home"}
-            ],
-          })
+      SecureStore.setItemAsync("email",email)
+      SecureStore.setItemAsync("password",password)
+      const resetAction = 
+        CommonActions.reset({
+          index:0,
+          routes: [
+            {name: "Home"}
+          ],
+        })
         props.navigation.dispatch(resetAction)
     })
 
     .catch((error)=>{
-      console.log(error)
       const errorMessage =()=>{
         switch (error.code) {
           case 'auth/cancelled-popup-request':

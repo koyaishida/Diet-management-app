@@ -269,6 +269,7 @@ const  PersonalDataScreen =(props)=>{
             keyboardType={"numeric"}
           />
           <Button title="この内容で登録する"
+            disabled={!targetWeight ?true: false }
             onPress={()=>{handleSubmit()}}
             titleStyle={{fontWeight:"bold",fontSize:20}}
             buttonStyle={{borderRadius:25,padding:18}}

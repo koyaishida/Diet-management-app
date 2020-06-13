@@ -156,14 +156,6 @@ const HomeScreen = (props)=> {
         weightLabels.push(dateToString(a.date).slice(5))
       })
       setWeightLabels(weightLabels)
-    
-
-      if(weightData.length == 0){
-        setCurrentWeight(0)
-      }else{
-        setCurrentWeight(weightList[weightList.length-1])
-        }
-      
     })
 
 
@@ -222,13 +214,18 @@ const HomeScreen = (props)=> {
       })
       setRequiredKcal(personalData[0].requiredKcal)
       setTargetWeight(personalData[0].targetWeight)
-      if(currentWeight === 0){
+
+      if(weightData.length == 0){
         setCurrentWeight(personalData[0].weight)
       }
+      else{
+        setCurrentWeight(weightList[weightList.length-1])
+        }
     })
     
     return () => {console.log('Clean Up ')};
   },[chartVisible])
+
 
   return (
     <View style={styles.container}>
