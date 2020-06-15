@@ -43,15 +43,14 @@ const SignupScreen = (props) => {
   const [email,setEmail] =useState("")
   const [password,setPassword] =useState("")
 
-  // signup function
+  // 新規登録処理
   const handleSignup = () => {
-    
-
     firebase.auth().createUserWithEmailAndPassword(email,password)
     .then(()=>{
       console.log("success")
       const db = firebase.firestore();
       const {currentUser} = firebase.auth();
+      //デフォルトのトレーニングメニューを追加
        db.collection(`users/${currentUser.uid}/trainingMenu`).add({
          "胸" : [
            "ベンチプレス","チェストプレス","ダンベルフライ"

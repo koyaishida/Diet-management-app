@@ -84,6 +84,7 @@ const  PersonalDataScreen =(props)=>{
   
   const buttons = ["低い", "普通", "高い"]
 
+  //身体活動レベル
   let activityLevel 
   if(selectedIndex == 0){
     activityLevel = 1.5
@@ -92,7 +93,7 @@ const  PersonalDataScreen =(props)=>{
       }else if(selectedIndex == 2){
         activityLevel = 2
         }   
-
+  //平均基礎代謝の計算
   let basalMetabolism 
   if(isMen == true){
     if(age<10){
@@ -155,7 +156,7 @@ const  PersonalDataScreen =(props)=>{
          });
       }
   
-       
+      
       const calculate =(scroll)=>{
         setBmi(Math.floor(weight/((height/100)*(height/100))))
         setDailyBasalMetabolism(Math.floor(basalMetabolism*weight))

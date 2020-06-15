@@ -85,17 +85,13 @@ const styles = StyleSheet.create({
 
 const LoginScreen = (props) => {
 
-  // const [email,setEmail] =useState("test2@gmail.com")
-  // const [password,setPassword] =useState("password")
-  //  const [email,setEmail] =useState("k.157.2aic@gmail.com")
-  //  const [password,setPassword] =useState("k-a.157.2")
    const [email,setEmail] =useState()
    const [password,setPassword] =useState()
    const [isModalVisible,setIsModalVisible]=useState(false)
    const toggleModal = ()=>{
      setIsModalVisible(!isModalVisible)
    }
-   
+   //前回ログイン時のemail・passの取得
    useEffect(()=>{
       SecureStore.getItemAsync("email")
       .then((email)=>{
@@ -107,7 +103,7 @@ const LoginScreen = (props) => {
       })
    },[])
    
-
+  //ログイン処理
   const handleLogin = () =>{
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then(()=>{
@@ -123,7 +119,6 @@ const LoginScreen = (props) => {
         })
         props.navigation.dispatch(resetAction)
     })
-
     .catch((error)=>{
       const errorMessage =()=>{
         switch (error.code) {
@@ -172,17 +167,13 @@ const LoginScreen = (props) => {
       alert(errorMessage())
     })   
   }
-  
+  //パスワードリセット
   const resetPassword =()=>{
     const auth = firebase.auth();
-    // const emailAddress = "user@example.com";
 
     auth.sendPasswordResetEmail(email).then(function() {
-      // Email sent.
       alert(`${email}にメールを送信しました。`)
     }).catch(function(error) {
-      // An error happened.
-      console.log(error)
       const errorMessage =()=>{
         switch (error.code) {
           case 'auth/cancelled-popup-request':
@@ -219,7 +210,7 @@ const LoginScreen = (props) => {
     });
   }
   
-  
+  //新規登録へ移動
   const switchToSignup = ()=>[
     props.navigation.navigate("Signup")
   ]

@@ -1,5 +1,5 @@
-import React ,{useState,useEffect}from 'react';
-import { StyleSheet, View,Text} from 'react-native';
+import React ,{ useState,useEffect}from 'react';
+import { StyleSheet, View, Text} from 'react-native';
 import TrainingList from "../components/TrainingList"
 import CircleButton from "../elements/CircleButton"
 import firebase from "firebase"
@@ -75,8 +75,8 @@ const  TrainingManagementScreen = (props)=> {
     return {date:dateToString(item.date),part:item.part}
   })
   
-  
-  const markedList = [0]
+
+  let  markedList = [0]
   const breast = {key:"breast",color:"red"}
   const back = {key:"back",color:"green"}
   const shoulder = {key:"shoulder",color:"blue"}
@@ -86,18 +86,21 @@ const  TrainingManagementScreen = (props)=> {
   const other = {key:"other",color:"black"}
   
   for(let i = 0 ; i < dotList.length; i++){
-     const addMarkedList = (part)=>{
-       markedList.push({
-         date:[dotList[i].date],
-         dot:{dots:[part]}
-       })
-     }
-    
-     const addDots = (part)=>{
-       if( markedList[markedList.length-1].dot.dots.indexOf(part)===-1){
-         markedList[markedList.length-1].dot.dots.push(part)
-       }
-     }
+    //日付とdotの追加
+    const addMarkedList = (part)=>{
+      markedList = [...markedList,{
+        date:[dotList[i].date],
+        dot:{dots:[part]}
+        }
+      ]
+    }
+    //dotColorのみ追加
+    const addDots = (part)=>{
+      if( markedList[markedList.length-1].dot.dots.indexOf(part)===-1){
+        markedList[markedList.length-1].dot.dots = [ ...markedList[markedList.length-1].dot.dots, part]
+      }
+    }
+      
     
 
     if(i == 0 || dotList[i].date !== dotList[i-1].date){

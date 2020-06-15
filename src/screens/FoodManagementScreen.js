@@ -107,18 +107,18 @@ const  FoodManagementScreen = (props)=> {
     })
 
     //Calenderに渡すmarkedDatesの加工
-    const markedDays = [0]
+    let markedDays = [0]
     kcalList.forEach((i)=>{
       if(requiredKcal - i.kcal >= 0){
-        markedDays.push({
-          date:i.date,
-          dot:{dots:[{color:"green"}]}
-        })
+         markedDays = [...markedDays,{
+           date:i.date,
+           dot:{dots:[{color:"green"}]}
+         }]
       }else if(requiredKcal - i.kcal < 0){
-        markedDays.push({
-          date:i.date,
-          dot:{dots:[{color:"red"}]}
-        })
+        markedDays = [...markedDays,{
+           date:i.date,
+           dot:{dots:[{color:"red"}]}
+         }]
       }
     })
     const dotDays = Object.assign(...markedDays.map(item => ({ [item.date]: item.dot })))

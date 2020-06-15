@@ -71,12 +71,12 @@ const  WeightManagementScreen = (props)=> {
            }
      })
      
-     const markedDays = [0]
+     let markedDays = [0]
      weightDataList.forEach((i)=>{
-       markedDays.push({
+       markedDays = [...markedDays,{
          date:dateToString(i.date),
          dot:{dots:[{color:"black"}]}
-       })
+       }]
      })
 
      const dotDays = Object.assign(...markedDays.map(item => ({ [item.date]: item.dot })))
