@@ -46,7 +46,7 @@ const TrainingMemoScreen = (props) => {
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View  style={styles.container}>
         <Input
-          label="重さ (kg)"
+          label={part === "有酸素"? '時間(分)':"重さ (kg)"}
           placeholder="半角数字で入力して下さい"
           value={kg}
           inputStyle={{padding:10}}
@@ -55,7 +55,7 @@ const TrainingMemoScreen = (props) => {
           keyboardType={"numeric"}
         />
          <Input
-          label="Reps (回数)"
+          label={part === "有酸素"? '距離(km)':"Reps (回数)"}
           placeholder="半角数字で入力して下さい"
           value={reps}
           inputStyle={{padding:10}}
@@ -64,7 +64,7 @@ const TrainingMemoScreen = (props) => {
           keyboardType={"numeric"}
         />
          <Input
-          label="セット数"
+          label={part === "有酸素"? '傾斜(度)':"セット数"}
           placeholder="半角数字で入力して下さい"
           value={setCount}
           inputStyle={{padding:10}}

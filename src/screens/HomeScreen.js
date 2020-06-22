@@ -23,6 +23,10 @@ const styles = StyleSheet.create({
   chartTitleValue:{
     fontSize:22,
   },
+  dangerChartTitleValue:{
+    fontSize:22,
+    color:"red"
+  },
   arrowContainer:{
     flexDirection:"row",
     justifyContent:"space-around",
@@ -223,7 +227,7 @@ const HomeScreen = (props)=> {
         }
     })
     
-    return () => {console.log('Clean Up ')};
+    return () => {};
   },[chartVisible])
 
 
@@ -249,8 +253,7 @@ const HomeScreen = (props)=> {
       />
       <View style={{backgroundColor:"#fff"}}>
         <Text style={styles.chartTitle}>必要摂取カロリーまであと
-          <Text style={styles.chartTitleValue}> {`${requiredKcal-currentKcal}`}</Text> 
-          kcal
+          <Text style={requiredKcal-currentKcal > -1 ? styles.chartTitleValue:styles.dangerChartTitleValue}> {`${requiredKcal-currentKcal} kcal`}</Text> 
         </Text>
       </View>
       

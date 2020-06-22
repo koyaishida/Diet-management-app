@@ -70,10 +70,12 @@ const SignupScreen = (props) => {
          "腹":[
            "アブドミナル","腹筋"
          ],
-         "その他": [
+         "有酸素": [
            "ランニング","ウォーキング",
+         ],
+         "その他":[
+
          ]
-          
        })
       const resetAction = 
           CommonActions.reset({

@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
 
 const LoginScreen = (props) => {
 
-   const [email,setEmail] =useState()
-   const [password,setPassword] =useState()
+   const [email,setEmail] =useState("")
+   const [password,setPassword] =useState("")
    const [isModalVisible,setIsModalVisible]=useState(false)
    const toggleModal = ()=>{
      setIsModalVisible(!isModalVisible)

@@ -81,9 +81,10 @@ const  TrainingManagementScreen = (props)=> {
   const back = {key:"back",color:"green"}
   const shoulder = {key:"shoulder",color:"blue"}
   const arm = {key:"arm",color:"orange"}
-  const  abs = {key:"abs",color:"#ff6ab5"}
+  const abs = {key:"abs",color:"#ff6ab5"}
   const leg = {key:"leg",color:"purple"}
-  const other = {key:"other",color:"black"}
+  const aerobic = {key:"aerobic",color:"black"}
+  const other = {key:"other",color:"#d3d3d3"}
   
   for(let i = 0 ; i < dotList.length; i++){
     //日付とdotの追加
@@ -121,6 +122,8 @@ const  TrainingManagementScreen = (props)=> {
       }
       else if(dotList[i].part=="脚"){
         addMarkedList(leg)
+      }else if(dotList[i].part=="有酸素"){
+        addMarkedList(aerobic)
       }else if(dotList[i].part=="その他"){
         addMarkedList(other)
       }
@@ -144,6 +147,9 @@ const  TrainingManagementScreen = (props)=> {
             else if(dotList[i].part=="脚"){
               addDots(leg)
            }
+            else if(dotList[i].part=="有酸素"){
+              addDots(aerobic)
+           } 
             else if(dotList[i].part=="その他"){
               addDots(other)
            } 
@@ -195,6 +201,10 @@ const  TrainingManagementScreen = (props)=> {
           </View>
           <View style={styles.dotsDescription}>
             <Text style={{color:"black",fontWeight:"bold"}}>・</Text>
+            <Text>有酸素</Text>
+          </View>
+          <View style={styles.dotsDescription}>
+            <Text style={{color:"#d3d3d3",fontWeight:"bold"}}>・</Text>
             <Text>その他</Text>
           </View>
         </View>

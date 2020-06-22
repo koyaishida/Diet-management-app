@@ -1,7 +1,8 @@
 import React ,{useState,useRef}from 'react';
 import { StyleSheet, View, Text,ScrollView,Dimensions} from 'react-native';
 import firebase from "firebase"
-import { CheckBox,Input,Button ,ButtonGroup} from 'react-native-elements'
+import { CheckBox,Input,Button ,ButtonGroup} from 'react-native-elements';
+import { CommonActions } from '@react-navigation/native'
 
 const screenHeight = Dimensions.get("window").height
 
@@ -12,6 +13,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding:10,
     justifyContent:"center",
+    height:screenHeight * 2
   },
   checkBox :{
     flexDirection : "row",
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom:30,
   },
   scrollContainer:{
-    height:screenHeight-100,
+    height:screenHeight,
     justifyContent:"center"
   }
 });
@@ -148,8 +150,13 @@ const  PersonalDataScreen =(props)=>{
             targetWeight:targetWeight,
           })
          .then(()=> {
-           props.navigation.navigate("Home")
-           console.log("then")
+           const resetAction = CommonActions.reset({
+             index:0,
+             routes: [
+              {name: "Home"}
+             ],
+           })
+           props.navigation.dispatch(resetAction)
          })
          .catch((error)=>{
            console.error("Error adding document: ", error);

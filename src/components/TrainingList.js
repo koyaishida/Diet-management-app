@@ -99,15 +99,15 @@ const  TrainingList =(props)=> {
               <View style={styles.rightContainer}>
                 <View style={styles.value}>
                   <Text style={styles.number}>{item.kg}</Text>
-                  <Text style={styles.unit}>kg</Text>
+    <Text style={styles.unit}>{item.part === "有酸素"?'分':"kg" }</Text>
                 </View>
                 <View style={styles.value}>
                   <Text style={styles.number}>{item.reps}</Text>
-                  <Text style={styles.unit}>回</Text>
+                  <Text style={styles.unit}>{item.part === "有酸素"?'km':"回" }</Text>
                 </View>
                 <View style={styles.value}>
                   <Text style={styles.number}>{item.setCount}</Text>
-                  <Text style={styles.unit}>セット</Text>
+    <Text style={styles.unit}>{item.part === "有酸素"?'度(傾斜)':"セット" }</Text>
                 </View>
               </View>
           </View> 
