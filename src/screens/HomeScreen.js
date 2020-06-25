@@ -128,13 +128,23 @@ const HomeScreen = (props)=> {
       setChartVisible(chartVisible-7)
     }
   }
-  
-  
      
   useEffect (()=>{
-    console.log("render")
     const {currentUser} = firebase.auth();
     const db =firebase.firestore()
+
+    db.collection(`users/${currentUser.uid}/personalData`)
+    .onSnapshot((querySnapshot)=>{
+      const personalData = []
+      querySnapshot.forEach((doc)=>{
+        personalData.push({...doc.data(),key: doc.id})
+       if(weightLabels[0]==0 || weightLabels.length == 0){
+         setCurrentWeight(personalData[0].weight)
+       }
+      })
+      setRequiredKcal(personalData[0].requiredKcal)
+      setTargetWeight(personalData[0].targetWeight)
+    })
     
 
     db.collection(`users/${currentUser.uid}/weight`)
@@ -152,6 +162,11 @@ const HomeScreen = (props)=> {
         weightList.push(parseFloat(item.weight))
       })
       setWeightList(weightList)
+      if(weightList.length !== 0){
+        setCurrentWeight(weightList[weightList.length-1])
+      }
+      
+      
     
       //体重のラベルの取得
       const weightLabels = [];
@@ -209,27 +224,10 @@ const HomeScreen = (props)=> {
           }
     })
     
-
-    db.collection(`users/${currentUser.uid}/personalData`)
-    .onSnapshot((querySnapshot)=>{
-      const personalData = []
-      querySnapshot.forEach((doc)=>{
-        personalData.push({...doc.data(),key: doc.id})
-      })
-      setRequiredKcal(personalData[0].requiredKcal)
-      setTargetWeight(personalData[0].targetWeight)
-
-      if(weightData.length == 0){
-        setCurrentWeight(personalData[0].weight)
-      }
-      else{
-        setCurrentWeight(weightList[weightList.length-1])
-        }
-    })
     
     return () => {};
   },[chartVisible])
-
+  
 
   return (
     <View style={styles.container}>
@@ -246,7 +244,7 @@ const HomeScreen = (props)=> {
         }}
         formatYLabel={formatWeightYLabel}
         yAxisSuffix=" kg" 
-        width={screenWidth} height={screenHeight/4.2} 
+        width={screenWidth} height={screenHeight/4.1} 
         chartConfig={chartConfig}
         withInnerLines={false}
         withOuterLines={false}
@@ -264,7 +262,7 @@ const HomeScreen = (props)=> {
         }}
         formatYLabel={formatKcalYLabel}
         yAxisSuffix="kcal" 
-        width={screenWidth} height={screenHeight/4.2} 
+        width={screenWidth} height={screenHeight/4.1} 
         chartConfig={chartConfig}
         withInnerLines={false}
         withOuterLines={false}

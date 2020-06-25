@@ -56,9 +56,9 @@ const FoodAddScreen = (props) => {
     .then(()=> {
       props.navigation.navigate("FoodManagement")
     })
-    .catch((error)=>{
-      console.error("Error adding document: ", error);
-    });
+     .catch((error)=>{
+       console.error("Error adding document: ", error);
+     });
   }
 
   const disabled =()=>{

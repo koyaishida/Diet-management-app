@@ -77,7 +77,7 @@ const sortedTrainingMenu = ((a,b)=>array.indexOf(a.part)-array.indexOf(b.part))
        navigation.navigate("TrainingMenu")
      })
      .catch((error)=>{
-       console.error("Error adding document: ", error);
+      console.error("Error adding document: ", error);
      });
   }
 

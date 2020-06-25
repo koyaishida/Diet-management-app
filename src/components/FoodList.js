@@ -62,12 +62,12 @@ const  FoodList =(props)=> {
      const db =firebase.firestore()
 
      db.collection(`users/${currentUser.uid}/food`).doc(`${deleteItemKey}`).delete()
-     .then(function() {
-       console.log("Document successfully deleted!");
-       })
-     .catch(function(error) {
-       console.error("Error removing document: ", error);
-     });
+      .then(function() {
+        console.log("Document successfully deleted!");
+        })
+      .catch(function(error) {
+        console.error("Error removing document: ", error);
+      });
    }
   const renderRightActions = ()=>{
     return (

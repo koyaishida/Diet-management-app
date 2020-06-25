@@ -65,12 +65,12 @@ const  TrainingList =(props)=> {
      const db =firebase.firestore()
 
      db.collection(`users/${currentUser.uid}/trainingMemoList`).doc(`${deleteItemKey}`).delete()
-     .then(function() {
-       console.log("Document successfully deleted!");
-       })
-     .catch(function(error) {
-       console.error("Error removing document: ", error);
-     });
+      .then(function() {
+        console.log("Document successfully deleted!");
+        })
+      .catch(function(error) {
+        console.error("Error removing document: ", error);
+      });
    }
   const renderRightActions = ()=>{
     return (
