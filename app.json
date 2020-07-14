@@ -26,6 +26,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "gmail.com.k.157.2aic.MuscleTrainingNote"
+    },
+    "android": {
+      "package":"gmailcom.k1572aic_MuscleTrainingNote"
     }
   }
 }
